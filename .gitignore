@@ -1,10 +1,5 @@
 *.DS_Store
 node_modules
-<<<<<<< HEAD
 # We do not commit CSS, only LESS
 public/css/*.css
-=======
-public/css/*.css
-
 npm-debug.log
->>>>>>> babc761ecba195d11df4e1f3e1d7f21ae6286011
