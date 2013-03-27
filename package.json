@@ -1,0 +1,28 @@
+{
+  "name": "apostrophe-events",
+  "version": "0.0.1",
+  "description": "Calendar of events for the Apostrophe content management system",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:punkave/apostrophe-events.git"
+  },
+  "keywords": [
+    "calendar",
+    "events",
+    "event",
+    "apostrophe",
+    "cms",
+    "punkave"
+  ],
+  "author": "P'unk Avenue LLC",
+  "license": "MIT",
+  "dependencies": {
+    "async": "~0.2.6",
+    "underscore": "~1.4.4",
+    "extend": "~1.1.3"
+  }
+}
