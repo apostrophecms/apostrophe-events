@@ -27,33 +27,34 @@ events.Events = function(options, callback) {
   snippets.Snippets.call(this, options, null);
   var superDispatch = self.dispatch;
 
-  function appendExtraFields(req, snippet, callback) {
+  function appendExtraFields(data, snippet, callback) {
     //shove the raw address into the snippet object on its way to mongo
-    // snippet.address = req.body.address;
-    // snippet.hours = req.body.hours;
-    // snippet.descr = req.body.descr;
-    // snippet.locType = req.body.locType;
+    // snippet.address = data.address;
+    // snippet.hours = data.hours;
+    // snippet.descr = data.descr;
+    // snippet.locType = data.locType;
 
     // use geocoder to generate a lat/long for the address and shove that in the snippet too
     // geocoder.geocode(req.body.address, function ( err, coords ) {
     //   if(!err) {
     //     snippet.coords = coords.results[0].geometry.location;
-    //     callback();
+    //     return callback();
     //   } else {
     //     console.log(err);
+    //     return callback(err);
     //   }
     // });
 
-    callback();
+    return callback();
   }
 
-  self.beforeInsert = function(req, snippet, callback) {
-    appendExtraFields(req, snippet, callback);
+  self.beforeInsert = function(req, data, snippet, callback) {
+    appendExtraFields(data, snippet, callback);
   };
 
   self.beforeUpdate = function() {
-    appendExtraFields(req, snippet, callback);
-  }
+    appendExtraFields(data, snippet, callback);
+  };
 
   self.dispatch = function(req, callback) {
     superDispatch.call(this, req, callback);
