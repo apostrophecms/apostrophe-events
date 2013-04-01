@@ -52,7 +52,7 @@ events.Events = function(options, callback) {
     appendExtraFields(data, snippet, callback);
   };
 
-  self.beforeUpdate = function() {
+  self.beforeUpdate = function(req, data, snippet, callback) {
     appendExtraFields(data, snippet, callback);
   };
 
@@ -64,5 +64,8 @@ events.Events = function(options, callback) {
     return 'My Event';
   };
 
-  process.nextTick(function() { return callback(null); });
-}
+  if (callback) {
+    process.nextTick(function() { return callback(null); });
+  }
+};
+

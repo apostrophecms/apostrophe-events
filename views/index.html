@@ -1,6 +1,6 @@
 {% extends "pageLayout.html" %}
 
-{% include "blogMacros.html" %}
+{% include "eventMacros.html" %}
 
 {% block bodyClass %}{{ super() }} apos-blog-page{% endblock %}
 
@@ -19,8 +19,8 @@
 {% block main %}
   {{ aposArea({ slug: slug + ':beforeContent', area: page.areas.beforeContent, edit: edit }) }}
 
-  <div class="apos-blog-posts">
-    {{ renderBlogPosts(items, page.url) }}
+  <div class="apos-events">
+    {{ renderEvents(items, page.url) }}
   </div>
 {% endblock %}
 
