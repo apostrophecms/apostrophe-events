@@ -8,29 +8,60 @@ function AposEvents(optionsArg) {
 
   function findExtraFields($el, data, callback) {
     //grab the value of the extra fields and toss them into the data object before carrying on
-    // data.address = $el.find('[name="address"]').val();
-    // data.locType = $el.find('[name="locType"]').val();
-    // data.hours = $el.find('[name="hours"]').val();
-    // data.descr = $el.find('[name="descr"]').val();
+    data.address = $el.find('[name="address"]').val();
+    data.descr = $el.find('[name="descr"]').val();
+    data.clickthrough = $el.find('[name="clickthrough"]').val();
+
+    //date/times
+    data.startDate = $el.find('[name="start-date"]').val();
+    data.startTime = $el.find('[name="start-time"]').val();
+    data.endDate = $el.find('[name="end-date"]').val();
+    data.endTime = $el.find('[name="end-time"]').val();
+    
     callback();
   }
 
   self.afterPopulatingEditor = function($el, snippet, callback) {
-    // $el.find('[name=address]').val(snippet.address);
-    // $el.find('[name="locType"]').val(snippet.locType);
-    // $el.find('[name="hours"]').val(snippet.hours);
-    // $el.find('[name="descr"]').val(snippet.descr);
+    $el.find('[name="address"]').val(snippet.address);
+    $el.find('[name="descr"]').val(snippet.descr);
+    $el.find('[name="clickthrough"]').val(snippet.clickthrough);
+    $el.find('[name="start-date"]').val(snippet.startDate);
+    $el.find('[name="start-time"]').val(snippet.startTime);
+    $el.find('[name="end-date"]').val(snippet.endDate);
+    $el.find('[name="end-time"]').val(snippet.endTime);
+
+    $(function(){
+      $el.find('[name="start-date"]').datepicker({
+        defaultDate: "+0w",
+        changeMonth: true,
+        numberOfMonths: 1,
+        onClose: function( selectedDate ) {
+          console.log(selectedDate);
+          $el.find('[name="end-date"]').datepicker( "option", "minDate", selectedDate );
+        }
+      });
+
+      $el.find('[name="end-date"]').datepicker({
+        defaultDate: "+0w",
+        changeMonth: true,
+        numberOfMonths: 1,
+        onClose: function( selectedDate ) {
+          $el.find('[name="start-date"]').datepicker( "option", "maxDate", selectedDate );
+        }
+      });      
+    })
+
     callback();
-  };
+ };
 
   self.beforeInsert = function($el, data, callback) {
-    // findExtraFields($el, data, callback);
-    callback();
+    findExtraFields($el, data, callback);
+    // callback();
   };
 
   self.beforeUpdate = function($el, data, callback) {
-    // findExtraFields($el, data, callback);
-    callback();
+    findExtraFields($el, data, callback);
+    // callback();
   };
 }
 
@@ -39,7 +70,7 @@ AposEvents.addWidgetType = function(options) {
     options = {};
   }
   _.defaults(options, {
-    name: 'event',
+    name: 'events',
     label: 'Events',
     action: '/apos-event',
     defaultLimit: 5

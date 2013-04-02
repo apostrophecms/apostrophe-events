@@ -1,0 +1,44 @@
+{% macro renderEvents(items, pageUrl) %}
+  {% if items %}
+
+    {% for item in items %}
+      {% if item.isFeatured %}
+        {{ renderEvent(item, pageUrl) }}
+      {% endif %}
+    {% endfor %}
+
+    {% for item in items %}
+      {% if item.isFeatured == false %}
+        {{ renderEvent(item, pageUrl) }}
+      {% endif %}
+    {% endfor %}
+
+  {% else %}
+    <h4>There are no events yet.</h4>
+  {% endif %}
+{% endmacro %}
+
+{% macro renderEvent(item, pageUrl) %}
+  {# event-livenation event-featured #}
+  <div class="event event-excerpt{% for tag in item.tags %} {{ tag | replace(' ','-') }}{% endfor %} ">
+    <div class="event-info info-overlay">
+      <date class="date">
+        <span class="month">{{ item.startMonth }}</span>
+        <span class="day">{{ item.startDay }}</span>
+      </date>
+    </div>
+    <div class="event-content">
+      <header class="event-heading">
+        <h4 class="event-title">{{ item.title | e }}</h4>
+        <h6 class="event-subheadline">{{ item.descr }}</h6>
+      </header>
+      <div class="event-location">{{ item.address }}</div>
+
+      {% if item.clickthrough %}
+        <a href="{{ item.clickthrough }}" target="_blank" class="event-more">More Information</a>
+      {% else %}
+        <a href="{{ pageUrl }}/{{ item.slug }}" class="event-more">More Information</a>
+      {% endif %}
+    </div>
+  </div>  
+{% endmacro %}
