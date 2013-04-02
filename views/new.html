@@ -1,52 +1,19 @@
+{% include 'snippetMacros.html' %}
 <div class="apos-modal apos-template {% block class %}apos-new-event{% endblock %}">
-  <h3 data-hint-title>{% block action %}New Event{% endblock %}</h3>
+  <h3>{% block label %}New Event{% endblock %}</h3>
   <div class="apos-modal-body">
     <form>
-      <fieldset>
-        <label>Title</label>
-        <input name="title" type="text" />
-      </fieldset>
-
-      <fieldset>
-        <label>Alternate URL</label>
-        <input name="clickthrough" type="text" />
-      </fieldset>
-
-      <fieldset>
-        <label>Location</label>
-        <input name="address" type="text" />
-      </fieldset>            
-
-      <fieldset>
-        <label>Desciption</label>
-        <input name="descr" type="text" />
-      </fieldset>
-
-      <fieldset>
-        <label>Tags (separated by commas)</label>
-        <input name="tags" type="text" />
-      </fieldset>
-
-
-      <fieldset>
-        <label>Start Date</label>
-        <input name="start-date" type="text" />
-      </fieldset>
-
-      <fieldset>
-        <label>Start Time</label>
-        <input name="start-time" type="text" />
-      </fieldset>
-
-      <fieldset>
-        <label>End Date</label>
-        <input name="end-date" type="text" />
-      </fieldset>
-
-      <fieldset>
-        <label>End Time</label>
-        <input name="end-time" type="text" />
-      </fieldset>
+      {{ snippetText('title', 'Title') }}
+      {{ snippetText('clickthrough', 'Alternate URL') }}
+      {{ snippetText('address', 'Location') }}
+      {{ snippetText('descr', 'Description') }}
+      {# Slugs become editable later, allow the edit template to add them here #}
+      {% block slug %}{% endblock %}
+      {{ snippetText('tags', 'Tags (comma-separated)') }}
+      {{ snippetText('start-date', 'Start Date') }}
+      {{ snippetText('start-time', 'Start Time') }}
+      {{ snippetText('end-date', 'End Date') }}
+      {{ snippetText('end-time', 'End Time') }}
 
     </form>
   </div>

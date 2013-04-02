@@ -1,6 +1,5 @@
 {% macro renderEvents(items, pageUrl) %}
   {% if items %}
-
     {% for item in items %}
       {% if item.isFeatured %}
         {{ renderEvent(item, pageUrl) }}
@@ -12,7 +11,6 @@
         {{ renderEvent(item, pageUrl) }}
       {% endif %}
     {% endfor %}
-
   {% else %}
     <h4>There are no events yet.</h4>
   {% endif %}
@@ -42,3 +40,4 @@
     </div>
   </div>  
 {% endmacro %}
+

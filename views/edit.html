@@ -1,63 +1,11 @@
-<div class="apos-modal apos-template apos-edit-event">
-  <h3 data-hint-title>Edit Event</h3>
-  <div class="apos-modal-body">
-    <form>
-      <fieldset>
-        <label>Title</label>
-        <input name="title" type="text" />
-      </fieldset>
+{% extends "new.html" %}
 
-      <fieldset>
-        <label>Slug</label>
-        <input name="slug" type="text" />
-      </fieldset>
+{% include "snippetMacros.html" %}
 
-      <fieldset>
-        <label>Alternate URL</label>
-        <input name="clickthrough" type="text" />
-      </fieldset>
+{% block class %}apos-edit-event{% endblock %}
 
-      <fieldset>
-        <label>Location</label>
-        <input name="address" type="text" />
-      </fieldset>            
+{% block label %}Edit Event{% endblock %}
 
-      <fieldset>
-        <label>Desciption</label>
-        <input name="descr" type="text" />
-      </fieldset>
-
-      <fieldset>
-        <label>Tags (separated by commas)</label>
-        <input name="tags" type="text" />
-      </fieldset>
-
-
-      <fieldset>
-        <label>Start Date</label>
-        <input name="start-date" type="text" />
-      </fieldset>
-
-      <fieldset>
-        <label>Start Time</label>
-        <input name="start-time" type="text" />
-      </fieldset>
-
-      <fieldset>
-        <label>End Date</label>
-        <input name="end-date" type="text" />
-      </fieldset>
-
-      <fieldset>
-        <label>End Time</label>
-        <input name="end-time" type="text" />
-      </fieldset>
-
-    </form>
-  </div>
-  <div class="apos-modal-footer">
-    <a href="#" data-action="save" class="apos-control apos-button apos-save">Save</a>
-    <a href="#" data-action="dismiss" class="apos-control apos-button apos-cancel">Cancel</a>
-    <a href="#" data-action="delete" class="apos-control apos-button apos-delete">Delete</a>
-  </div>
-</div>
+{% block slug %}
+  {{ snippetText('slug', 'Slug') }}
+{% endblock %}

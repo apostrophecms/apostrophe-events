@@ -15,16 +15,22 @@ events.Events = function(options, callback) {
 
   _.defaults(options, {
     instance: 'event',
+<<<<<<< HEAD
     name: options.name || 'events',
     label: options.name || 'Events',
     webAssetDir: __dirname + '/public',
+=======
+    name: options.name || 'event',
+    label: options.name || 'Event',
+    webAssetDir: __dirname,
+>>>>>>> 7abb897ef6c15159d48e1a5d529e3f852ca6df91
     menuName: 'aposEventsMenu'
   });
 
   options.dirs = (options.dirs || []).concat([ __dirname ]);
 
   snippets.Snippets.call(this, options, null);
-  
+
   function appendExtraFields(req, snippet, callback) {
     // shove the raw address into the snippet object on its way to mongo
     snippet.address = req.body.address;
@@ -50,17 +56,18 @@ events.Events = function(options, callback) {
         break;
       }
     }
-
-    callback();
+  
+    return callback();
   }
 
-  self.beforeInsert = function(req, snippet, callback) {
-    appendExtraFields(req, snippet, callback);
+  self.beforeInsert = function(req, data, snippet, callback) {
+    appendExtraFields(data, snippet, callback);
   };
 
-  self.beforeUpdate = function(req, snippet, callback) {
-    appendExtraFields(req, snippet, callback);
-  }
+  self.beforeUpdate = function(req, data, snippet, callback) {
+    appendExtraFields(data, snippet, callback);
+  };
+
 
   self.dispatch = function(req, callback) {
     var permalink = false;
@@ -132,5 +139,8 @@ events.Events = function(options, callback) {
     return 'My Event';
   };
 
-  process.nextTick(function() { return callback(null); });
-}
+  if (callback) {
+    process.nextTick(function() { return callback(null); });
+  }
+};
+
