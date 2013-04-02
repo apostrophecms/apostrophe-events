@@ -14,12 +14,25 @@ Or just use tags to pull in eventss.
 {% endblock %}
 
 {% block formBody %}
-  <label>By Tag</label><input type="radio" name="by" value="tag" />
+  <fieldset>
+    <label>By Tag</label>
+    <input type="radio" name="by" value="tag" />
+  </fieldset>
+    
   <fieldset>
     <label>Tags</label><input type="text" name="tags" />
-    <label>Events Shown</label><input type="text" name="limit" />
   </fieldset>
-  <label>By Title</label><input type="radio" name="by" value="id" />
+
+  <fieldset>
+    <label>Events Shown</label>
+    <input type="text" name="limit" />
+  </fieldset>
+
+  <fieldset>
+    <label>By Title</label>
+    <input type="radio" name="by" value="id" />
+  </fieldset>
+  
   <fieldset>
     <label>Titles</label><input type="text" name="title" />
     <ul data-ids>

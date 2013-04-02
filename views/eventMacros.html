@@ -27,10 +27,12 @@
     </div>
     <div class="event-content">
       <header class="event-heading">
-        <h4 class="event-title">{{ item.title | e }}</h4>
+        <h4 class="event-title"><a href="{{ pageUrl }}/{{ item.slug }}">{{ item.title | e }}</a></h4>
         <h6 class="event-subheadline">{{ item.descr }}</h6>
       </header>
-      <div class="event-location">{{ item.address }}</div>
+      {% if item.address %}
+        <div class="event-location">{{ item.address }}</div>
+      {% endif %}
 
       {% if item.clickthrough %}
         <a href="{{ item.clickthrough }}" target="_blank" class="event-more">More Information</a>
@@ -40,4 +42,3 @@
     </div>
   </div>  
 {% endmacro %}
-
