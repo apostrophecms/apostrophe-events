@@ -97,8 +97,6 @@ events.Events = function(options, callback) {
 
     //sort them by date.
     criteria.sort = {"startDate": 1};
-    //add in the normal criteria
-    self.addCriteria(req, criteria);
 
     self.get(req, criteria, function(err, snippets) {
       if (err) {
