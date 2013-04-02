@@ -17,7 +17,7 @@ events.Events = function(options, callback) {
     instance: 'event',
     name: options.name || 'events',
     label: options.name || 'Events',
-    webAssetDir: __dirname + '/public',
+    webAssetDir: __dirname,
     menuName: 'aposEventsMenu'
   });
 
@@ -25,27 +25,27 @@ events.Events = function(options, callback) {
 
   snippets.Snippets.call(this, options, null);
 
-  function appendExtraFields(req, snippet, callback) {
+  function appendExtraFields(data, snippet, callback) {
     // shove the raw address into the snippet object on its way to mongo
-    snippet.address = req.body.address;
-    snippet.descr = req.body.descr;
-    snippet.clickthrough = req.body.clickthrough;
+    snippet.address = data.address;
+    snippet.descr = data.descr;
+    snippet.clickthrough = data.clickthrough;
 
-    snippet.startDate = req.body.startDate;
-    var startDateMoment = moment(req.body.startDate);
+    snippet.startDate = data.startDate;
+    var startDateMoment = moment(data.startDate);
     snippet.startMonth = startDateMoment.format('MMM');
     snippet.numberMonth = startDateMoment.format('M');
     snippet.startDay = startDateMoment.format('DD')
 
-    snippet.startTime = req.body.startTime;
-    snippet.endDate = req.body.endDate;
-    snippet.endTime = req.body.endTime;
+    snippet.startTime = data.startTime;
+    snippet.endDate = data.endDate;
+    snippet.endTime = data.endTime;
 
     snippet.isFeatured = false;
 
     for(var t in snippet.tags) {
       if(snippet.tags[t] == "featured") {
-        console.log(t);
+        // console.log(t);
         snippet.isFeatured = true;
         break;
       }
