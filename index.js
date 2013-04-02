@@ -15,15 +15,9 @@ events.Events = function(options, callback) {
 
   _.defaults(options, {
     instance: 'event',
-<<<<<<< HEAD
     name: options.name || 'events',
     label: options.name || 'Events',
     webAssetDir: __dirname + '/public',
-=======
-    name: options.name || 'event',
-    label: options.name || 'Event',
-    webAssetDir: __dirname,
->>>>>>> 7abb897ef6c15159d48e1a5d529e3f852ca6df91
     menuName: 'aposEventsMenu'
   });
 
