@@ -4,10 +4,17 @@
   <div class="apos-modal-body">
     <form>
       {{ snippetText('title', 'Title') }}
+      {{ snippetText('clickthrough', 'Alternate URL') }}
+      {{ snippetText('address', 'Location') }}
+      {{ snippetText('descr', 'Description') }}
       {# Slugs become editable later, allow the edit template to add them here #}
       {% block slug %}{% endblock %}
       {{ snippetText('tags', 'Tags (comma-separated)') }}
-      {{ snippetArea('body', 'Body') }}
+      {{ snippetText('start-date', 'Start Date') }}
+      {{ snippetText('start-time', 'Start Time') }}
+      {{ snippetText('end-date', 'End Date') }}
+      {{ snippetText('end-time', 'End Time') }}
+
     </form>
   </div>
   {% block buttons %}
