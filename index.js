@@ -94,10 +94,6 @@ events.Events = function(options, callback) {
     req.extras.nextMonth = (parseInt(criteria.numberMonth) + 1 > 12 ? 1 : parseInt(criteria.numberMonth) + 1);
     req.extras.prevMonth = (parseInt(criteria.numberMonth) - 1 < 1 ? 12 : parseInt(criteria.numberMonth) - 1);
 
-
-    //sort them by date.
-    criteria.sort = {"startDate": 1};
-
     self.get(req, criteria, function(err, snippets) {
       if (err) {
         return callback(err);
@@ -125,6 +121,19 @@ events.Events = function(options, callback) {
         return callback(null);
       });
     });
+  };
+
+  // Establish the default sort order for events
+  var superGet = self.get;
+  self.get = function(req, optionsArg, callback) {
+    var options = {};
+    // "Why copy the object like this?" If we don't, we're modifying the
+    // object that was passed to us, which could lead to side effects
+    extend(options, optionsArg || {}, true);
+    if (!options.sort) {
+      options.sort = { startDate: 1, startTime: 1 };
+    }
+    return superGet.call(self, req, options, callback);
   };
 
   self.getDefaultTitle = function() {
