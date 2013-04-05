@@ -31,7 +31,7 @@ events.Events = function(options, callback) {
     snippet.descr = self._apos.sanitizeString(data.descr || data.description);
     snippet.link = self._apos.sanitizeString(data.link);
 
-    snippet.startDate = self._apos.sanitizeString(data.startDate || data.date);
+    snippet.startDate = self._apos.sanitizeDate(data.startDate || data.date);
     var startDateMoment;
     try {
       startDateMoment = moment(snippet.startDate);
@@ -47,9 +47,20 @@ events.Events = function(options, callback) {
       console.log(data);
     }
 
-    snippet.startTime = self._apos.sanitizeString(data.startTime || data.time);
-    snippet.endDate = self._apos.sanitizeString(data.endDate, null);
-    snippet.endTime = self._apos.sanitizeString(data.endTime, null);
+    snippet.startTime = self._apos.sanitizeTime(data.startTime || data.time, null);
+    if (snippet.startTime === null) {
+      snippet.start = new Date(snippet.startDate);
+    } else {
+      snippet.start = new Date(snippet.startDate + ' ' + snippet.startTime);
+    }
+
+    snippet.endDate = self._apos.sanitizeDate(data.endDate, snippet.startDate);
+    snippet.endTime = self._apos.sanitizeTime(data.endTime, snippet.startTime);
+    if (snippet.endTime === null) {
+      snippet.end = new Date(snippet.endDate);
+    } else {
+      snippet.end = new Date(snippet.endDate + ' ' + snippet.startTime);
+    }
 
     return callback();
   }
@@ -130,7 +141,8 @@ events.Events = function(options, callback) {
     // object that was passed to us, which could lead to side effects
     extend(options, optionsArg || {}, true);
     if (!options.sort) {
-      options.sort = { startDate: 1, startTime: 1 };
+      // start is always a Date object, suitable for sorting
+      options.sort = { start: 1 };
     }
     return superGet.call(self, req, options, callback);
   };
