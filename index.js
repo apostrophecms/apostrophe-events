@@ -26,31 +26,31 @@ events.Events = function(options, callback) {
   snippets.Snippets.call(this, options, null);
 
   function appendExtraFields(data, snippet, callback) {
-    // shove the raw address into the snippet object on its way to mongo
-    snippet.address = data.address;
-    snippet.descr = data.descr;
-    snippet.clickthrough = data.clickthrough;
+    // Be tolerant of common field names
+    snippet.address = self._apos.sanitizeString(data.address || data.location);
+    snippet.descr = self._apos.sanitizeString(data.descr || data.description);
+    snippet.link = self._apos.sanitizeString(data.link);
 
-    snippet.startDate = data.startDate;
-    var startDateMoment = moment(data.startDate);
-    snippet.startMonth = startDateMoment.format('MMM');
-    snippet.numberMonth = startDateMoment.format('M');
-    snippet.startDay = startDateMoment.format('DD')
-
-    snippet.startTime = data.startTime;
-    snippet.endDate = data.endDate;
-    snippet.endTime = data.endTime;
-
-    snippet.isFeatured = false;
-
-    for(var t in snippet.tags) {
-      if(snippet.tags[t] == "featured") {
-        // console.log(t);
-        snippet.isFeatured = true;
-        break;
-      }
+    snippet.startDate = self._apos.sanitizeString(data.startDate || data.date);
+    var startDateMoment;
+    try {
+      startDateMoment = moment(snippet.startDate);
+      snippet.startMonth = startDateMoment.format('MMM');
+      snippet.numberMonth = startDateMoment.format('M');
+      snippet.startDay = startDateMoment.format('DD');
+    } catch(e) {
+      console.log("DATE ERROR IS:");
+      console.log(e);
+      console.log('startDate was:');
+      console.log(snippet.startDate);
+      console.log("data is:");
+      console.log(data);
     }
-  
+
+    snippet.startTime = self._apos.sanitizeString(data.startTime || data.time);
+    snippet.endDate = self._apos.sanitizeString(data.endDate, null);
+    snippet.endTime = self._apos.sanitizeString(data.endTime, null);
+
     return callback();
   }
 
@@ -66,7 +66,7 @@ events.Events = function(options, callback) {
   self.dispatch = function(req, callback) {
     var permalink = false;
     var criteria = {};
-    
+
     if (req.remainder.length) {
       var byMonth = req.remainder.match(/month/);
       if(byMonth) {
