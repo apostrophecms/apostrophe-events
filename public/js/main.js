@@ -48,20 +48,22 @@ function AposEvents(optionsArg) {
         onClose: function( selectedDate ) {
           $el.find('[name="start-date"]').datepicker( "option", "maxDate", selectedDate );
         }
-      });      
-    })
+      });
+    });
 
     callback();
  };
 
+  self.addingToManager = function($el, $snippet, snippet) {
+    $snippet.find('[data-date]').text(snippet.startDate);
+  };
+
   self.beforeInsert = function($el, data, callback) {
     findExtraFields($el, data, callback);
-    // callback();
   };
 
   self.beforeUpdate = function($el, data, callback) {
     findExtraFields($el, data, callback);
-    // callback();
   };
 }
 

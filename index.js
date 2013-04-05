@@ -62,7 +62,6 @@ events.Events = function(options, callback) {
     appendExtraFields(data, snippet, callback);
   };
 
-
   self.dispatch = function(req, callback) {
     var permalink = false;
     var criteria = {};
