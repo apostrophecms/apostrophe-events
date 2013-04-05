@@ -1,11 +1,43 @@
 <div class="apos-modal apos-template apos-manage-event">
   <h3 data-hint-title>{% block action %}Manage Events{% endblock %}</h3>
   <div class="apos-modal-body">
+    <table data-items class="apos-manage-table">
+      <tr>
+        <th>Date</th>
+        <th>Title</th>
+        <!-- <th>Author</th> -->
+        <!-- <th>Status</th> -->
+      </tr>
+      <tr class="apos-template" data-item>
+        <td>
+          <span data-date></span>
+        </td>
+        <td>
+          <a href="#" data-edit-event data-title>Sample Title</a>
+        </td>
+      </tr>
+    </table>
+  </div>
+  <div class="apos-modal-footer">
+    <a href="#" data-action="dismiss" class="apos-control apos-button apos-cancel">Done</a>
+  </div>
+</div>
+
+
+
+<!-- <div class="apos-modal apos-template apos-manage-event">
+  <h3 data-hint-title>{% block action %}Manage Events{% endblock %}</h3>
+  <div class="apos-modal-body">
     <ul data-items>
-      <li class="apos-template" data-item><a href="#" data-edit-event data-title></a></li>
+      <li class="apos-column"></li>
+      <li class="apos-template" data-item>
+        
+        <span data-title></span>
+      </li>
     </ul>
   </div>
   <div class="apos-modal-footer">
     <a href="#" data-action="dismiss" class="apos-control apos-button apos-cancel">Done</a>
   </div>
 </div>
+ -->

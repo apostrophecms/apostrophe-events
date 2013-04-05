@@ -35,7 +35,7 @@ events.Events = function(options, callback) {
     var startDateMoment = moment(data.startDate);
     snippet.startMonth = startDateMoment.format('MMM');
     snippet.numberMonth = startDateMoment.format('M');
-    snippet.startDay = startDateMoment.format('DD')
+    snippet.startDay = startDateMoment.format('DD');
 
     snippet.startTime = data.startTime;
     snippet.endDate = data.endDate;
@@ -61,7 +61,6 @@ events.Events = function(options, callback) {
   self.beforeUpdate = function(req, data, snippet, callback) {
     appendExtraFields(data, snippet, callback);
   };
-
 
   self.dispatch = function(req, callback) {
     var permalink = false;
