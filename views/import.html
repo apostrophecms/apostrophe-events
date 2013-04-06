@@ -2,7 +2,7 @@
   <h3>{% block action %}Import Events{% endblock %}</h3>
   <div class="apos-modal-body">
     <form>
-      <fieldset>
+      <fieldset class="apos-fieldset apos-fieldset-choose-file">
         <label>CSV File</label>
         {# Blueimp makes this go #}
         <input data-url="/apos-event/import" type="file" name="file" />
