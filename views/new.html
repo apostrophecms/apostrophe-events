@@ -6,10 +6,12 @@
       {{ snippetText('title', 'Title') }}
       {{ snippetText('link', 'Alternate URL') }}
       {{ snippetText('address', 'Location') }}
-      {{ snippetText('descr', 'Description') }}
+      {{ snippetTextarea('descr', 'Description') }}
       {# Slugs become editable later, allow the edit template to add them here #}
       {% block slug %}{% endblock %}
       {{ snippetText('tags', 'Tags (comma-separated)') }}
+      {# The real work for these is in main.js, just get placeholders into the form #}
+      {{ snippetSingleton('thumbnail', 'Thumbnail') }}
       {{ snippetText('start-date', 'Start Date') }}
       {{ snippetText('start-time', 'Start Time') }}
       {{ snippetText('end-date', 'End Date') }}
