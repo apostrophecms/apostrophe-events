@@ -17,6 +17,7 @@ events.Events = function(options, callback) {
     instance: 'event',
     name: options.name || 'events',
     label: options.name || 'Events',
+    icon: options.icon || 'events',
     webAssetDir: __dirname,
     menuName: 'aposEventsMenu'
   });
