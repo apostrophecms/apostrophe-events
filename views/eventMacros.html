@@ -20,6 +20,7 @@
   {# event-livenation event-featured #}
   <div class="event event-excerpt{% for tag in item.tags %} {{ tag | replace(' ','-') }}{% endfor %} ">
     <div class="event-info info-overlay">
+      {{ aposSingleton({ area: item.areas.thumbnail, type: 'slideshow', limit: 1 }) }}
       <date class="date">
         <span class="month">{{ item.startMonth }}</span>
         <span class="day">{{ item.startDay }}</span>

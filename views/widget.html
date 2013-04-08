@@ -1,7 +1,9 @@
 {% for snippet in item._snippets %}
   <div class="event event-excerpt">
     <div class="event-info info-overlay">
+      {{ aposSingleton({ area: snippet.areas.thumbnail, type: 'slideshow', limit: 1 }) }}
       <date class="date">
+
         <span class="month">{{ snippet.startMonth }}</span>
         <span class="day">{{ snippet.startDay }}</span>
       </date>
@@ -13,7 +15,7 @@
         <h4 class="event-title"><a href="/events/{{snippet.slug}}">{{ snippet.title | e }}</a></h4>
       </header>
       <div class="event-body">
-       {{ snippet.descr }}
+       {#{ snippet.descr }#}
       </div>
       <a href="/events/{{snippet.slug}}" class="event-more">Read More</a>
     </div>
