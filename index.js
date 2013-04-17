@@ -168,7 +168,7 @@ events.Events = function(options, callback) {
     var options = {};
     // "Why copy the object like this?" If we don't, we're modifying the
     // object that was passed to us, which could lead to side effects
-    extend(options, optionsArg || {}, true);
+    extend(true, options, optionsArg || {});
     if (!options.sort) {
       // start is always a Date object, suitable for sorting
       options.sort = { start: 1 };
