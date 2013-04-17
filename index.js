@@ -152,7 +152,7 @@ events.Events = function(options, callback) {
       }
 
 
-      //THIS IS WHERE I AM GRABBING THE LIST OF ALL TAGS ASSOCIATED WITH EVENTS. I NEED TO REPLICATE THIS WITH MAPS
+      //THIS IS WHERE I AM GRABBING THE LIST OF ALL TAGS ASSOCIATED WITH EVENTS.
       self._apos.pages.distinct("tags", {"type":"event"}, function(err, tags){
         req.extras.allTags = tags;
 
