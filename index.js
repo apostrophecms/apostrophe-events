@@ -60,7 +60,7 @@ events.Events = function(options, callback) {
     if (snippet.endTime === null) {
       snippet.end = new Date(snippet.endDate);
     } else {
-      snippet.end = new Date(snippet.endDate + ' ' + snippet.startTime);
+      snippet.end = new Date(snippet.endDate + ' ' + snippet.endTime);
     }
 
     return callback();
