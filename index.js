@@ -60,11 +60,39 @@ events.Events = function(options, callback) {
     if (snippet.endTime === null) {
       snippet.end = new Date(snippet.endDate);
     } else {
-      snippet.end = new Date(snippet.endDate + ' ' + snippet.startTime);
+      snippet.end = new Date(snippet.endDate + ' ' + snippet.endTime);
     }
 
     return callback();
   }
+
+  var superAddDiffLines = self.addDiffLines;
+
+  // Make sure our custom fields are included in version diffs
+  self.addDiffLines = function(snippet, lines) {
+    superAddDiffLines(snippet, lines);
+    if (snippet.startDate) {
+      lines.push('start date: ' + snippet.startDate);
+    }
+    if (snippet.startTime) {
+      lines.push('start time: ' + snippet.startTime);
+    }
+    if (snippet.endDate) {
+      lines.push('start date: ' + snippet.startDate);
+    }
+    if (snippet.endTime) {
+      lines.push('start time: ' + snippet.startTime);
+    }
+    if (snippet.address) {
+      lines.push('address: ' + snippet.address);
+    }
+    if (snippet.descr) {
+      lines.push('description: ' + snippet.descr);
+    }
+    if (snippet.link) {
+      lines.push('link: ' + snippet.link);
+    }
+  };
 
   self.beforeInsert = function(req, data, snippet, callback) {
     appendExtraFields(data, snippet, callback);
