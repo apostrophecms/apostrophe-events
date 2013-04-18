@@ -133,6 +133,9 @@ events.Events = function(options, callback) {
     req.extras.nextMonth = (parseInt(criteria.numberMonth) + 1 > 12 ? 1 : parseInt(criteria.numberMonth) + 1);
     req.extras.prevMonth = (parseInt(criteria.numberMonth) - 1 < 1 ? 12 : parseInt(criteria.numberMonth) - 1);
 
+    // Make sure we call addCriteria to get things like tag filtering
+    self.addCriteria(req, criteria);
+
     self.get(req, criteria, function(err, snippets) {
       if (err) {
         return callback(err);
