@@ -145,6 +145,7 @@ events.Events = function(options, callback) {
           req.template = 'notfound';
         } else {
           req.template = self.renderer('show');
+          snippets[0].url = self.permalink(snippets[0], req.bestPage);
           // Generic noun so we can more easily inherit templates
           req.extras.item = snippets[0];
         }
@@ -152,6 +153,9 @@ events.Events = function(options, callback) {
         req.template = self.renderer('index');
         // Generic noun so we can more easily inherit templates
         req.extras.items = snippets;
+        _.each(snippets, function(snippet) {
+          snippet.url = self.permalink(snippet, req.bestPage);
+        });
       }
 
 
