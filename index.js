@@ -180,6 +180,10 @@ events.Events = function(options, callback) {
       // start is always a Date object, suitable for sorting
       options.sort = { start: 1 };
     }
+    if (options.upcoming) {
+      options.start = { $gte: new Date() };
+      delete options.upcoming;
+    }
     return superGet.call(self, req, options, callback);
   };
 
