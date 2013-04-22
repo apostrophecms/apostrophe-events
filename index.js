@@ -187,6 +187,18 @@ events.Events = function(options, callback) {
     return 'My Event';
   };
 
+  // TODO this is not very i18n friendly
+  self.getAutocompleteTitle = function(snippet) {
+    return snippet.title + ' (' + snippet.numberMonth + '/' + snippet.startDay + ')';
+  };
+
+  // I bet you want some extra fields available along with the title to go with
+  // your custom getAutocompleteTitle. Override this to retrieve more stuff.
+  // We keep it to a minimum for performance.
+  self.getAutocompleteFields = function() {
+    return { title: 1, _id: 1, numberMonth: 1, startDay: 1 };
+  };
+
   if (callback) {
     process.nextTick(function() { return callback(null); });
   }
