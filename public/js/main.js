@@ -56,6 +56,15 @@ function AposEvents(optionsArg) {
 
   self.addingToManager = function($el, $snippet, snippet) {
     $snippet.find('[data-date]').text(snippet.startDate);
+    var status;
+    if (snippet.trash) {
+      status = 'Trash';
+    } else if (snippet.published) {
+      status = 'Published';
+    } else {
+      status = 'Draft';
+    }
+    $snippet.find('[data-status]').text(status);
   };
 
   self.beforeInsert = function($el, data, callback) {
