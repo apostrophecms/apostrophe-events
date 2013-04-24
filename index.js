@@ -160,7 +160,12 @@ events.Events = function(options, callback) {
 
 
       //THIS IS WHERE I AM GRABBING THE LIST OF ALL TAGS ASSOCIATED WITH EVENTS.
-      self._apos.pages.distinct("tags", {"type":"event"}, function(err, tags){
+      var criteria = { type: 'event' };
+      // Limit the query for distinct tags to tags that this page is interested in
+      if (req.page.typeSettings.tags.length) {
+        criteria.tags = { $in: req.page.typeSettings.tags };
+      }
+      self._apos.pages.distinct("tags", criteria, function(err, tags){
         req.extras.allTags = tags;
 
         // THIS IS THE FINAL CALLBACK THAT TRIGGERS THE RENDERING AND WHATNOT... IT IS IMPORTANT
