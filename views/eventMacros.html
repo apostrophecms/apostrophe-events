@@ -18,7 +18,7 @@
 
 {% macro renderEvent(item, pageUrl) %}
   {# event-livenation event-featured #}
-  <div class="event event-excerpt{% for tag in item.tags %} {{ tag | replace(' ','-') }}{% endfor %} ">
+  <div class="event event-excerpt{% for tag in item.tags %} {{ tag | css }}{% endfor %} ">
     <div class="event-info info-overlay">
       {{ aposSingleton({ area: item.areas.thumbnail, type: 'slideshow', limit: 1, size: 'one-third' }) }}
       <date class="date">
