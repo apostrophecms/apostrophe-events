@@ -24,6 +24,12 @@ events.Events = function(options, callback) {
 
   options.dirs = (options.dirs || []).concat([ __dirname ]);
 
+  // "They set options.widget to true, so they are hoping for a standard
+  // events widget constructor."
+  if (options.widget && (typeof(options.widget) !== 'function')) {
+    options.widget = events.widget;
+  }
+
   snippets.Snippets.call(this, options, null);
 
   function appendExtraFields(data, snippet, callback) {
@@ -213,3 +219,13 @@ events.Events = function(options, callback) {
   }
 };
 
+// Subclass the widget constructor to enhance the criteria
+events.widget = function(options) {
+  var self = this;
+  snippets.widget.Widget.call(self, options);
+  var superAddCriteria = self.addCriteria;
+  self.addCriteria = function(item, criteria) {
+    superAddCriteria.call(self, item, criteria);
+    criteria.upcoming = true;
+  };
+};
