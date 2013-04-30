@@ -233,6 +233,14 @@ events.Events = function(options, callback) {
     return { title: 1, _id: 1, numberMonth: 1, startDay: 1 };
   };
 
+  // Autocomplete should not show past events, it makes it very hard to find
+  // any upcoming events
+  var superAddExtraAutocompleteCriteria = self.addExtraAutocompleteCriteria;
+  self.addExtraAutocompleteCriteria = function(req, criteria) {
+    superAddExtraAutocompleteCriteria.call(self, req, criteria);
+    criteria.upcoming = true;
+  };
+
   if (callback) {
     process.nextTick(function() { return callback(null); });
   }
