@@ -195,7 +195,26 @@ events.Events = function(options, callback) {
       options.start = { $gte: new Date() };
       delete options.upcoming;
     }
-    return superGet.call(self, req, options, callback);
+    return superGet.call(self, req, options, function(err, results) {
+      if (err) {
+        return callback(err);
+      }
+      // Make it easy for templates and other code to identify events that
+      // are entirely in the future, entirely in the past, and happening right now
+      var now = new Date();
+      _.each(results, function(result) {
+        if (result.start > now) {
+          result._future = true;
+        }
+        if (result.end < now) {
+          result._past = true;
+        }
+        if ((result.start < now) && (result.end >= now)) {
+          result._present = true;
+        }
+      });
+      return callback(null, results);
+    });
   };
 
   self.getDefaultTitle = function() {
