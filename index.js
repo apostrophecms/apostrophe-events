@@ -203,13 +203,18 @@ events.Events = function(options, callback) {
       // are entirely in the future, entirely in the past, and happening right now
       var now = new Date();
       _.each(results, function(result) {
+        var end = result.end || result.start;
+        if (end === result.start) {
+          // If the start and end times are the same assume the event lasts a day
+          end.setDate(end.getDate() + 1);
+        }
         if (result.start > now) {
           result._future = true;
         }
-        if (result.end < now) {
+        if (end < now) {
           result._past = true;
         }
-        if ((result.start < now) && (result.end >= now)) {
+        if ((result.start < now) && (end >= now)) {
           result._present = true;
         }
       });
