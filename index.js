@@ -233,9 +233,10 @@ events.Events = function(options, callback) {
 
   // I bet you want some extra fields available along with the title to go with
   // your custom getAutocompleteTitle. Override this to retrieve more stuff.
-  // We keep it to a minimum for performance.
+  // We keep it to a minimum for performance. start and end are important for
+  // comparability and classification
   self.getAutocompleteFields = function() {
-    return { title: 1, _id: 1, numberMonth: 1, startDay: 1 };
+    return { title: 1, _id: 1, numberMonth: 1, startDay: 1, start: 1, end: 1 };
   };
 
   // Autocomplete should not show past events, it makes it very hard to find
