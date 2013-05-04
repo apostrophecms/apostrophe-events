@@ -1,7 +1,8 @@
 function AposEvents(optionsArg) {
   var self = this;
   var options = {
-    instance: 'event'
+    instance: 'event',
+    name: 'events'
   };
   $.extend(options, optionsArg);
   AposSnippets.call(self, options);
