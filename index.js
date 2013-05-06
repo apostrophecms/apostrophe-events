@@ -18,11 +18,10 @@ events.Events = function(options, callback) {
     name: options.name || 'events',
     label: options.name || 'Events',
     icon: options.icon || 'events',
-    webAssetDir: __dirname,
     menuName: 'aposEventsMenu'
   });
 
-  options.dirs = (options.dirs || []).concat([ __dirname ]);
+  options.modules = (options.modules || []).concat([ { dir: __dirname, name: 'events' } ]);
 
   // "They set options.widget to true, so they are hoping for a standard
   // events widget constructor."

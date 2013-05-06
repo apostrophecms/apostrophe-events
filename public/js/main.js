@@ -84,7 +84,7 @@ AposEvents.addWidgetType = function(options) {
   _.defaults(options, {
     name: 'events',
     label: 'Events',
-    action: '/apos-event',
+    action: '/apos-events',
     defaultLimit: 5
   });
   AposSnippets.addWidgetType(options);
