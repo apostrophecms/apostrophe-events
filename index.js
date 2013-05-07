@@ -110,33 +110,66 @@ events.Events = function(options, callback) {
   self.dispatch = function(req, callback) {
     var permalink = false;
     var criteria = {};
-
+    var year, month, day;
     if (req.remainder.length) {
-      var byMonth = req.remainder.match(/month/);
-      if(byMonth) {
-        //get everything after "/month/". it will be looking for a month number
-        var start = req.remainder.substr(7);
-        criteria.numberMonth = start;
-
-        //use moment to convert that number into a pretty string
-        var prettyMonth = moment().month(criteria.numberMonth -1).format('MMMM');
-        req.extras.activeMonth = prettyMonth;
+      var byDate = req.remainder.match(/^\/(\d+)(\/(\d+))?(\/(\d+))?$/);
+      if (byDate) {
+        year = byDate[1];
+        month = byDate[3];
+        day = byDate[5];
       } else {
         //we're trying to get a slug/permalink
         criteria.slug = req.remainder.substr(1);
         permalink = true;
       }
-    } else {
-      //it's just a regular old index page so lets render the current month.
-      var now = moment().format('M');
-      criteria.numberMonth = now;
-      var prettyMonth = moment().month(criteria.numberMonth -1).format('MMMM');
-      req.extras.activeMonth = prettyMonth;
+    }
+    if (!permalink) {
+      // Create 'from' and 'to' dates in YYYY-MM-DD format for mongodb criteria
+      if (!year) {
+        // Default to current month
+        year = moment().format('YYYY');
+        month = moment().format('MM');
+        req.extras.defaultView = true;
+      }
+      if (!month) {
+        // Default to January of the year specified
+        month = '01';
+      }
+      fromDate = pad(year, 4) + '-' + pad(month, 2) + '-01';
+      toDate = pad(year, 4) + '-' + pad(month, 2) + '-31';
+
+      // Must start before the end of the range
+      criteria.startDate = { $lte: toDate };
+      // Must not end before the beginning of the range
+      criteria.endDate = { $gte: fromDate };
+
+      // For displaying the active month and year
+      req.extras.activeYear = pad(year, 4);
+      req.extras.activeMonth = pad(month, 2);
+
+      // set up the next and previous urls for our "pagination"
+      var nextYear = year;
+      var nextMonth = parseInt(month, 10) + 1;
+      if (nextMonth > 12) {
+        nextMonth = 1;
+        nextYear = parseInt(nextYear, 10) + 1;
+      }
+      nextMonth = pad(nextMonth, 2);
+      req.extras.next = nextYear + '/' + nextMonth;
+      var prevYear = year;
+      var prevMonth = parseInt(month, 10) - 1;
+      if (prevMonth < 1) {
+        prevMonth = 12;
+        prevYear = parseInt(nextYear, 10) - 1;
+      }
+      prevMonth = pad(prevMonth, 2);
+      req.extras.prev = prevYear + '/' + prevMonth;
+
     }
 
-    //set up the next and previous urls for our "pagination"
-    req.extras.nextMonth = (parseInt(criteria.numberMonth) + 1 > 12 ? 1 : parseInt(criteria.numberMonth) + 1);
-    req.extras.prevMonth = (parseInt(criteria.numberMonth) - 1 < 1 ? 12 : parseInt(criteria.numberMonth) - 1);
+    function pad(s, n) {
+      return self._apos.padInteger(s, n);
+    }
 
     // Make sure we call addCriteria to get things like tag filtering
     self.addCriteria(req, criteria);
