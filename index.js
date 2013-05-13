@@ -24,6 +24,19 @@ events.Events = function(options, callback) {
 
   options.modules = (options.modules || []).concat([ { dir: __dirname, name: 'events' } ]);
 
+  // TODO this is kinda ridiculous. We need to have a way to call a function that
+  // adds some routes before the static route is added. Maybe the static route should
+  // be moved so it can't conflict with anything.
+  if (!options.addRoutes) {
+    options.addRoutes = addRoutes;
+  } else {
+    var superAddRoutes = options.addRoutes;
+    options.addRoutes = function() {
+      addRoutes();
+      superAddRoutes();
+    };
+  }
+
   // "They set options.widget to true, so they are hoping for a standard
   // events widget constructor."
   if (options.widget && (typeof(options.widget) !== 'function')) {
@@ -297,6 +310,65 @@ events.Events = function(options, callback) {
   self.addExtraAutocompleteCriteria = function(req, criteria) {
     superAddExtraAutocompleteCriteria.call(self, req, criteria);
     criteria.upcoming = true;
+  };
+
+  function addRoutes() {
+    self._app.get(self._action + '/vcal', function(req, res) {
+      var slug = req.query.slug;
+      self.get(req, { slug: slug }, function(err, pages) {
+        if (err) {
+          res.statusCode = 500;
+          return res.send('error');
+        }
+        if (!pages.length) {
+          res.statusCode = 404;
+          return res.send('not found');
+        }
+        var event = pages[0];
+        res.setHeader('Content-type', 'text/x-vcalendar');
+        res.setHeader('Content-disposition', slug + '.vcs');
+        var start = self.getVCalTimestamp(event.start);
+        var end = self.getVCalTimestamp(event.end);
+        var title = self.textToVcal(event.title);
+        var body = self.textToVcal(self._apos.getAreaPlaintext({ area: event.areas.body }));
+        var location = self.textToVcal(self.getEventAddress(event));
+        var uid = event._id;
+        // A hack because we don't have publication dates for events (so far)
+        var publishedAt = self.getVCalTimestamp(new Date());
+        return res.send('BEGIN:VCALENDAR\n' +
+          'PRODID:-//punkave//apostrophe 2.x//EN\n' +
+          'VERSION:1.0\n' +
+          'TZ:0\n' +
+          'BEGIN:VEVENT\n' +
+          'CATEGORIES:MEETING\n' +
+          'DTSTART:' + start + '\n' +
+          'DTEND:' + end + '\n' +
+          'DTSTAMP:' + publishedAt + '\n' +
+          'SUMMARY:' + title + '\n' +
+          'DESCRIPTION:' + body + '\n' +
+          'LOCATION:' + location + '\n' +
+          'UID:' + uid + '\n' +
+          'END:VEVENT\n' +
+          'END:VCALENDAR\n');
+      });
+    });
+  }
+
+  // Can be overridden if you are associating events with places differently.
+  // Should return a string with the full street address
+  self.getEventAddress = function(event) {
+    return event.location;
+  };
+
+  self.textToVcal = function(s) {
+    s += '';
+    // vcal is fairly picky. Avoid a lot of problems by
+    // simplifying whitespace
+    s = s.replace(/ \n\r/g, ' ');
+    // Expressly must be escaped in vcal
+    s = s.replace(/;/g, '\\;');
+    s = s.trim();
+    return s;
   };
 
   if (callback) {
