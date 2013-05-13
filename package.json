@@ -26,6 +26,7 @@
     "extend": "~1.1.3",
     "apostrophe-snippets": "0.0.x",
     "moment": "~2.0.0",
-    "geocoder": "*"
+    "geocoder": "*",
+    "qs": "~0.6.5"
   }
 }

@@ -3,6 +3,7 @@ var _ = require('underscore');
 var extend = require('extend');
 var snippets = require('apostrophe-snippets');
 var moment = require('moment');
+var qs = require('qs');
 
 module.exports = events;
 
@@ -70,6 +71,25 @@ events.Events = function(options, callback) {
 
     return callback();
   }
+
+  self._apos.addLocal('aposEventGoogle', function(e) {
+    var s = 'http://www.google.com/calendar/event?' + qs.stringify({
+      text: e.title,
+      dates: self.getUTCDateRange(e),
+      action: 'TEMPLATE',
+      location: e._place ? e._place.address : e.address,
+      details: self._apos.getAreaPlaintext({ area: e.areas.body, truncate: 500 })
+    });
+    return s;
+  });
+
+  self.getUTCDateRange = function(e) {
+    return self.getVCalTimestamp(e.start) + '/' + self.getVCalTimestamp(e.end);
+  };
+
+  self.getVCalTimestamp = function(t) {
+    return moment(t).utc().format('YYYYMMDD[T]HHmmss[Z]');
+  };
 
   var superAddDiffLines = self.addDiffLines;
 

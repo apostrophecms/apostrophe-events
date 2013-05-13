@@ -37,7 +37,6 @@ function AposEvents(optionsArg) {
         changeMonth: true,
         numberOfMonths: 1,
         onClose: function( selectedDate ) {
-          console.log(selectedDate);
           $el.find('[name="end-date"]').datepicker( "option", "minDate", selectedDate );
         }
       });
