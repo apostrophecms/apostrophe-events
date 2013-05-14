@@ -27,9 +27,9 @@ function AposEvents(optionsArg) {
     $el.find('[name="descr"]').val(snippet.descr);
     $el.find('[name="clickthrough"]').val(snippet.clickthrough);
     $el.find('[name="start-date"]').val(snippet.startDate);
-    $el.find('[name="start-time"]').val(snippet.startTime);
+    $el.find('[name="start-time"]').val(apos.formatTime(snippet.startTime));
     $el.find('[name="end-date"]').val(snippet.endDate);
-    $el.find('[name="end-time"]').val(snippet.endTime);
+    $el.find('[name="end-time"]').val(apos.formatTime(snippet.endTime));
 
     $(function(){
       $el.find('[name="start-date"]').datepicker({
