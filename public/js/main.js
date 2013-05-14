@@ -31,25 +31,8 @@ function AposEvents(optionsArg) {
     $el.find('[name="end-date"]').val(snippet.endDate);
     $el.find('[name="end-time"]').val(apos.formatTime(snippet.endTime));
 
-    $(function(){
-      $el.find('[name="start-date"]').datepicker({
-        defaultDate: "+0w",
-        changeMonth: true,
-        numberOfMonths: 1,
-        onClose: function( selectedDate ) {
-          $el.find('[name="end-date"]').datepicker( "option", "minDate", selectedDate );
-        }
-      });
-
-      $el.find('[name="end-date"]').datepicker({
-        defaultDate: "+0w",
-        changeMonth: true,
-        numberOfMonths: 1,
-        onClose: function( selectedDate ) {
-          $el.find('[name="start-date"]').datepicker( "option", "maxDate", selectedDate );
-        }
-      });
-    });
+    apos.enhanceDate($el.findByName('start-date'), { $minFor: $el.findByName('end-date') });
+    apos.enhanceDate($el.findByName('end-date'), { $maxFor: $el.findByName('start-date') });
 
     callback();
  };
