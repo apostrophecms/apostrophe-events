@@ -229,14 +229,15 @@ events.Events = function(options, callback) {
         });
       }
 
-
-      //THIS IS WHERE I AM GRABBING THE LIST OF ALL TAGS ASSOCIATED WITH EVENTS.
-      var criteria = { type: 'event' };
+      // Reuse the criteria to find tags of relevance. But the criteria for
+      // tags themselves should be open of course, except for hard restrictions
+      // on what is shown on this page
+      delete criteria.tags;
       // Limit the query for distinct tags to tags that this page is interested in
       if (req.page.typeSettings.tags.length) {
         criteria.tags = { $in: req.page.typeSettings.tags };
       }
-      self._apos.pages.distinct("tags", criteria, function(err, tags){
+      self._apos.pages.distinct("tags", criteria, function(err, tags) {
         req.extras.allTags = tags;
 
         // THIS IS THE FINAL CALLBACK THAT TRIGGERS THE RENDERING AND WHATNOT... IT IS IMPORTANT
