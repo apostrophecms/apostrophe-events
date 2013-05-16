@@ -144,8 +144,9 @@ events.Events = function(options, callback) {
     var permalink = false;
     var criteria = {};
     var year, month, day;
+    var byDate = false;
     if (req.remainder.length) {
-      var byDate = req.remainder.match(/^\/(\d+)(\/(\d+))?(\/(\d+))?$/);
+      byDate = req.remainder.match(/^\/(\d+)(\/(\d+))?(\/(\d+))?$/);
       if (byDate) {
         year = byDate[1];
         month = byDate[3];
@@ -157,47 +158,47 @@ events.Events = function(options, callback) {
       }
     }
     if (!permalink) {
+      self.addPager(req, criteria);
+      var now = moment();
+      req.extras.thisYear = now.format('YYYY');
+      req.extras.thisMonth = now.format('MM');
       // Create 'from' and 'to' dates in YYYY-MM-DD format for mongodb criteria
-      if (!year) {
-        // Default to current month
-        year = moment().format('YYYY');
-        month = moment().format('MM');
+      if (!byDate) {
+        // If we're not browsing by month, simply show upcoming events
+        criteria.upcoming = true;
         req.extras.defaultView = true;
-      }
-      if (!month) {
-        // Default to January of the year specified
-        month = '01';
-      }
-      fromDate = pad(year, 4) + '-' + pad(month, 2) + '-01';
-      toDate = pad(year, 4) + '-' + pad(month, 2) + '-31';
+      } else {
+        fromDate = pad(year, 4) + '-' + pad(month, 2) + '-01';
+        toDate = pad(year, 4) + '-' + pad(month, 2) + '-31';
+        // Must start before the end of the range
+        criteria.startDate = { $lte: toDate };
+        // Must not end before the beginning of the range
+        criteria.endDate = { $gte: fromDate };
+        // For displaying the active month and year
+        req.extras.activeYear = pad(year, 4);
+        req.extras.activeMonth = pad(month, 2);
+        // set up the next and previous urls for our calendar
+        var nextYear = year;
+        var nextMonth = parseInt(month, 10) + 1;
+        if (nextMonth > 12) {
+          nextMonth = 1;
+          nextYear = parseInt(year, 10) + 1;
+        }
+        nextMonth = pad(nextMonth, 2);
+        req.extras.nextYear = nextYear;
+        req.extras.nextMonth = nextMonth;
 
-      // Must start before the end of the range
-      criteria.startDate = { $lte: toDate };
-      // Must not end before the beginning of the range
-      criteria.endDate = { $gte: fromDate };
-
-      // For displaying the active month and year
-      req.extras.activeYear = pad(year, 4);
-      req.extras.activeMonth = pad(month, 2);
-
-      // set up the next and previous urls for our "pagination"
-      var nextYear = year;
-      var nextMonth = parseInt(month, 10) + 1;
-      if (nextMonth > 12) {
-        nextMonth = 1;
-        nextYear = parseInt(nextYear, 10) + 1;
+        var prevYear = year;
+        var prevMonth = parseInt(month, 10) - 1;
+        if (prevMonth < 1) {
+          prevMonth = 12;
+          prevYear = parseInt(year, 10) - 1;
+          console.log('backed up to ' + prevYear);
+        }
+        prevMonth = pad(prevMonth, 2);
+        req.extras.prevYear = prevYear;
+        req.extras.prevMonth = prevMonth;
       }
-      nextMonth = pad(nextMonth, 2);
-      req.extras.next = nextYear + '/' + nextMonth;
-      var prevYear = year;
-      var prevMonth = parseInt(month, 10) - 1;
-      if (prevMonth < 1) {
-        prevMonth = 12;
-        prevYear = parseInt(nextYear, 10) - 1;
-      }
-      prevMonth = pad(prevMonth, 2);
-      req.extras.prev = prevYear + '/' + prevMonth;
-
     }
 
     function pad(s, n) {
@@ -207,10 +208,11 @@ events.Events = function(options, callback) {
     // Make sure we call addCriteria to get things like tag filtering
     self.addCriteria(req, criteria);
 
-    self.get(req, criteria, function(err, snippets) {
+    self.get(req, criteria, function(err, results) {
       if (err) {
         return callback(err);
       }
+      var snippets = results.snippets;
       if (permalink) {
         if (!snippets.length) {
           req.template = 'notfound';
@@ -221,6 +223,7 @@ events.Events = function(options, callback) {
           req.extras.item = snippets[0];
         }
       } else {
+        self.setPagerTotal(req, results.total);
         req.template = self.renderer('index');
         // Generic noun so we can more easily inherit templates
         req.extras.items = snippets;
@@ -228,21 +231,8 @@ events.Events = function(options, callback) {
           snippet.url = self.permalink(snippet, req.bestPage);
         });
       }
-
-      // Reuse the criteria to find tags of relevance. But the criteria for
-      // tags themselves should be open of course, except for hard restrictions
-      // on what is shown on this page
-      delete criteria.tags;
-      // Limit the query for distinct tags to tags that this page is interested in
-      if (req.page.typeSettings.tags.length) {
-        criteria.tags = { $in: req.page.typeSettings.tags };
-      }
-      self._apos.pages.distinct("tags", criteria, function(err, tags) {
-        req.extras.allTags = tags;
-
-        // THIS IS THE FINAL CALLBACK THAT TRIGGERS THE RENDERING AND WHATNOT... IT IS IMPORTANT
-        return callback(null);
-      });
+      req.extras.allTags = results.tags;
+      return callback(null);
     });
   };
 
@@ -268,7 +258,7 @@ events.Events = function(options, callback) {
       // Make it easy for templates and other code to identify events that
       // are entirely in the future, entirely in the past, and happening right now
       var now = new Date();
-      _.each(results, function(result) {
+      _.each(results.snippets, function(result) {
         var end = result.end || result.start;
         if (end === result.start) {
           // If the start and end times are the same assume the event lasts a day
@@ -316,16 +306,17 @@ events.Events = function(options, callback) {
   function addRoutes() {
     self._app.get(self._action + '/vcal', function(req, res) {
       var slug = req.query.slug;
-      self.get(req, { slug: slug }, function(err, pages) {
+      self.get(req, { slug: slug }, function(err, results) {
+        var events = results.snippets;
         if (err) {
           res.statusCode = 500;
           return res.send('error');
         }
-        if (!pages.length) {
+        if (!events.length) {
           res.statusCode = 404;
           return res.send('not found');
         }
-        var event = pages[0];
+        var event = events[0];
         res.setHeader('Content-type', 'text/x-vcalendar');
         res.setHeader('Content-disposition', slug + '.vcs');
         var start = self.getVCalTimestamp(event.start);

@@ -1,3 +1,5 @@
+{# TODO: THIS IS OUT OF DATE, BORROW FROM DR PROJECT AND UPDATE TO INCLUDE MONTH NAV #}
+
 {% extends "pageLayout.html" %}
 
 {% include "eventMacros.html" %}
@@ -22,6 +24,7 @@
   <div class="apos-events">
     {{ renderEvents(items, page.url) }}
   </div>
+  {{ renderPager(pager, page.url) }}
 {% endblock %}
 
 {% block sidebar %}
