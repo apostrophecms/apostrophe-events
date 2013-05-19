@@ -193,7 +193,6 @@ events.Events = function(options, callback) {
         if (prevMonth < 1) {
           prevMonth = 12;
           prevYear = parseInt(year, 10) - 1;
-          console.log('backed up to ' + prevYear);
         }
         prevMonth = pad(prevMonth, 2);
         req.extras.prevYear = prevYear;
