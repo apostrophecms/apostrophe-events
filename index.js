@@ -246,8 +246,12 @@ events.Events = function(options, callback) {
       // start is always a Date object, suitable for sorting
       options.sort = { start: 1 };
     }
+    // An upcoming event is one that ENDS in the future. Otherwise a
+    // 3-day event that is 1 day in will not show up, which is too harsh.
+    // Summer-long events can be tedious in this sort of system but there's
+    // only so much one can do about that.
     if (options.upcoming) {
-      options.start = { $gte: new Date() };
+      options.end = { $gte: new Date() };
       delete options.upcoming;
     }
     return superGet.call(self, req, options, function(err, results) {
