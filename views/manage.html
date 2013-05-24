@@ -1,4 +1,5 @@
 {% include 'snippetMacros.html' %}
+
 <div class="apos-modal apos-template apos-manage-event">
   <h3 data-hint-title>{% block action %}Manage Events{% endblock %}</h3>
   <div class="apos-modal-body">
@@ -26,6 +27,8 @@
         </td>
       </tr>
     </table>
+    {# Container for pager, which gets rendered here by js #}
+    <div data-pager-box></div>
   </div>
   <div class="apos-modal-footer">
     <a href="#" data-action="dismiss" class="apos-control apos-button apos-cancel">Done</a>
