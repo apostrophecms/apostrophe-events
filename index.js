@@ -143,6 +143,7 @@ events.Events = function(options, callback) {
   self.dispatch = function(req, callback) {
     var permalink = false;
     var criteria = {};
+    var options = {};
     var year, month, day;
     var byDate = false;
     if (req.remainder.length) {
@@ -158,14 +159,14 @@ events.Events = function(options, callback) {
       }
     }
     if (!permalink) {
-      self.addPager(req, criteria);
+      self.addPager(req, options);
       var now = moment();
       req.extras.thisYear = now.format('YYYY');
       req.extras.thisMonth = now.format('MM');
       // Create 'from' and 'to' dates in YYYY-MM-DD format for mongodb criteria
       if (!byDate) {
         // If we're not browsing by month, simply show upcoming events
-        criteria.upcoming = true;
+        options.upcoming = true;
         req.extras.defaultView = true;
       } else {
         fromDate = pad(year, 4) + '-' + pad(month, 2) + '-01';
@@ -205,9 +206,9 @@ events.Events = function(options, callback) {
     }
 
     // Make sure we call addCriteria to get things like tag filtering
-    self.addCriteria(req, criteria);
+    self.addCriteria(req, criteria, options);
 
-    self.get(req, criteria, function(err, results) {
+    self.get(req, criteria, options, function(err, results) {
       if (err) {
         return callback(err);
       }
@@ -237,8 +238,9 @@ events.Events = function(options, callback) {
 
   // Establish the default sort order for events
   var superGet = self.get;
-  self.get = function(req, optionsArg, callback) {
+  self.get = function(req, userCriteria, optionsArg, callback) {
     var options = {};
+    var filterCriteria = {};
     // "Why copy the object like this?" If we don't, we're modifying the
     // object that was passed to us, which could lead to side effects
     extend(true, options, optionsArg || {});
@@ -251,10 +253,9 @@ events.Events = function(options, callback) {
     // Summer-long events can be tedious in this sort of system but there's
     // only so much one can do about that.
     if (options.upcoming) {
-      options.end = { $gte: new Date() };
-      delete options.upcoming;
+      filterCriteria.end = { $gte: new Date() };
     }
-    return superGet.call(self, req, options, function(err, results) {
+    return superGet.call(self, req, { $and: [ userCriteria, filterCriteria ] }, options, function(err, results) {
       if (err) {
         return callback(err);
       }
@@ -303,7 +304,7 @@ events.Events = function(options, callback) {
   var superAddExtraAutocompleteCriteria = self.addExtraAutocompleteCriteria;
   self.addExtraAutocompleteCriteria = function(req, criteria) {
     superAddExtraAutocompleteCriteria.call(self, req, criteria);
-    criteria.upcoming = true;
+    options.upcoming = true;
   };
 
   function addRoutes() {
@@ -371,13 +372,14 @@ events.Events = function(options, callback) {
   }
 };
 
-// Subclass the widget constructor to enhance the criteria
+// Subclass the widget constructor to enhance the criteria.
+// Specifically, always pull only upcoming events in a widget
 events.widget = function(options) {
   var self = this;
   snippets.widget.Widget.call(self, options);
   var superAddCriteria = self.addCriteria;
-  self.addCriteria = function(item, criteria) {
-    superAddCriteria.call(self, item, criteria);
-    criteria.upcoming = true;
+  self.addCriteria = function(item, criteria, options) {
+    superAddCriteria.call(self, item, criteria, options);
+    options.upcoming = true;
   };
 };
