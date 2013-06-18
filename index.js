@@ -69,7 +69,9 @@ events.Events = function(options, callback) {
 
     snippet.startTime = self._apos.sanitizeTime(data.startTime || data.time, null);
     if (snippet.startTime === null) {
-      snippet.start = new Date(snippet.startDate);
+      // Make sure we specify midnight, if we leave off the time entirely we get
+      // midnight UTC, not midnight local time
+      snippet.start = new Date(snippet.startDate + ' 00:00:00');
     } else {
       snippet.start = new Date(snippet.startDate + ' ' + snippet.startTime);
     }
@@ -77,7 +79,9 @@ events.Events = function(options, callback) {
     snippet.endDate = self._apos.sanitizeDate(data.endDate, snippet.startDate);
     snippet.endTime = self._apos.sanitizeTime(data.endTime, snippet.startTime);
     if (snippet.endTime === null) {
-      snippet.end = new Date(snippet.endDate);
+      // Make sure we specify midnight, if we leave off the time entirely we get
+      // midnight UTC, not midnight local time
+      snippet.end = new Date(snippet.endDate + ' 00:00:00');
     } else {
       snippet.end = new Date(snippet.endDate + ' ' + snippet.endTime);
     }
