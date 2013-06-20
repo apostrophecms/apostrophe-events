@@ -335,21 +335,22 @@ events.Events = function(options, callback) {
         var uid = event._id;
         // A hack because we don't have publication dates for events (so far)
         var publishedAt = self.getVCalTimestamp(new Date());
-        return res.send('BEGIN:VCALENDAR\n' +
-          'PRODID:-//punkave//apostrophe 2.x//EN\n' +
-          'VERSION:1.0\n' +
-          'TZ:0\n' +
-          'BEGIN:VEVENT\n' +
-          'CATEGORIES:MEETING\n' +
-          'DTSTART:' + start + '\n' +
-          'DTEND:' + end + '\n' +
-          'DTSTAMP:' + publishedAt + '\n' +
-          'SUMMARY:' + title + '\n' +
-          'DESCRIPTION:' + body + '\n' +
-          'LOCATION:' + location + '\n' +
-          'UID:' + uid + '\n' +
-          'END:VEVENT\n' +
-          'END:VCALENDAR\n');
+        // Outlook insists on \r\n https://dev.plone.org/ticket/4512
+        return res.send('BEGIN:VCALENDAR\r\n' +
+          'PRODID:-//punkave//apostrophe 2.x//EN\r\n' +
+          'VERSION:1.0\r\n' +
+          'TZ:0\r\n' +
+          'BEGIN:VEVENT\r\n' +
+          'CATEGORIES:MEETING\r\n' +
+          'DTSTART:' + start + '\r\n' +
+          'DTEND:' + end + '\r\n' +
+          'DTSTAMP:' + publishedAt + '\r\n' +
+          'SUMMARY:' + title + '\r\n' +
+          'DESCRIPTION:' + body + '\r\n' +
+          'LOCATION:' + location + '\r\n' +
+          'UID:' + uid + '\r\n' +
+          'END:VEVENT\r\n' +
+          'END:VCALENDAR\r\n');
       });
     });
   }
