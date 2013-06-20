@@ -314,7 +314,7 @@ events.Events = function(options, callback) {
   function addRoutes() {
     self._app.get(self._action + '/vcal', function(req, res) {
       var slug = req.query.slug;
-      self.get(req, { slug: slug }, function(err, results) {
+      self.get(req, { slug: slug }, {}, function(err, results) {
         var events = results.snippets;
         if (err) {
           res.statusCode = 500;
