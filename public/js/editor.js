@@ -10,8 +10,6 @@ function AposEvents(optionsArg) {
   function findExtraFields($el, data, callback) {
     //grab the value of the extra fields and toss them into the data object before carrying on
     data.address = $el.find('[name="address"]').val();
-    data.descr = $el.find('[name="descr"]').val();
-    data.clickthrough = $el.find('[name="clickthrough"]').val();
 
     //date/times
     data.startDate = $el.find('[name="start-date"]').val();
@@ -24,8 +22,6 @@ function AposEvents(optionsArg) {
 
   self.afterPopulatingEditor = function($el, snippet, callback) {
     $el.find('[name="address"]').val(snippet.address);
-    $el.find('[name="descr"]').val(snippet.descr);
-    $el.find('[name="clickthrough"]').val(snippet.clickthrough);
     $el.find('[name="start-date"]').val(snippet.startDate);
     $el.find('[name="start-time"]').val(apos.formatTime(snippet.startTime));
     $el.find('[name="end-date"]').val(snippet.endDate);

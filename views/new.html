@@ -6,20 +6,19 @@
   <div class="apos-modal-body">
     <form>
       {{ snippetText('title', 'Title') }}
-      {{ snippetText('link', 'Alternate URL') }}
-      {{ snippetText('address', 'Location') }}
-      {{ snippetTextarea('descr', 'Description') }}
       {# Slugs become editable later, allow the edit template to add them here #}
       {% block slug %}{% endblock %}
-      {{ snippetText('tags', 'Tags (comma-separated)') }}
-      {# TODO macroize this as snippetBoolean #}
-      {{ snippetSelect('published', 'Published', [ { name: '0', label: 'No' }, { name: '1', label: 'Yes' }]) }}
-      {# The real work for these is in main.js, just get placeholders into the form #}
-      {{ snippetSingleton('thumbnail', 'Thumbnail') }}
       {{ snippetText('start-date', 'Start Date') }}
       {{ snippetText('start-time', 'Start Time') }}
       {{ snippetText('end-date', 'End Date') }}
       {{ snippetText('end-time', 'End Time') }}
+      {{ snippetText('tags', 'Tags (comma-separated)') }}
+      {# TODO macroize this as snippetBoolean #}
+      {{ snippetBoolean('published', 'Published') }}
+      {# The real work for these is in main.js, just get placeholders into the form #}
+      {{ snippetArea('body', 'Description') }}
+      {{ snippetSingleton('thumbnail', 'Thumbnail') }}
+      {{ snippetText('address', 'Address') }}
 
     </form>
   </div>
