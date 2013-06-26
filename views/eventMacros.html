@@ -1,17 +1,12 @@
 {% include 'pagerMacros.html' %}
 
+{% include 'pagerMacros.html' %}
+{# use renderEvents to show all items as full posts on a page #}
+
 {% macro renderEvents(items, pageUrl) %}
   {% if items %}
     {% for item in items %}
-      {% if item.isFeatured %}
-        {{ renderEvent(item, pageUrl) }}
-      {% endif %}
-    {% endfor %}
-
-    {% for item in items %}
-      {% if item.isFeatured == false %}
-        {{ renderEvent(item, pageUrl) }}
-      {% endif %}
+      {{ renderEvent(item, pageUrl) }}
     {% endfor %}
   {% else %}
     <h4>There are no events yet.</h4>
@@ -19,29 +14,69 @@
 {% endmacro %}
 
 {% macro renderEvent(item, pageUrl) %}
-  {# event-livenation event-featured #}
-  <div class="event event-excerpt{% for tag in item.tags %} {{ tag | css }}{% endfor %} ">
-    <div class="event-info info-overlay">
-      {{ aposSingleton({ area: item.areas.thumbnail, type: 'slideshow', limit: 1, size: 'one-third' }) }}
-      <date class="date">
-        <span class="month">{{ item.startMonth }}</span>
-        <span class="day">{{ item.startDay }}</span>
-      </date>
+  <div class="apos-event">
+    <div class="apos-event-heading">
+      <h4><a href="{{ pageUrl }}/{{ item.slug }}">{{ item.title | e }}</a></h4>
+      <div class="blog-title-divider"></div>
+      <h6><date>{{ eventDateRange(item) }}</date></h6>
     </div>
-    <div class="event-content">
-      <header class="event-heading">
-        <h4 class="event-title"><a href="{{ pageUrl }}/{{ item.slug }}">{{ item.title | e }}</a></h4>
-        <h6 class="event-subheadline">{{ item.descr }}</h6>
-      </header>
-      {% if item.address %}
-        <div class="event-location">{{ item.address }}</div>
-      {% endif %}
-
-      {% if item.clickthrough %}
-        <a href="{{ item.clickthrough }}" target="_blank" class="event-more">More Information</a>
-      {% else %}
-        <a href="{{ pageUrl }}/{{ item.slug }}" class="event-more">More Information</a>
-      {% endif %}
-    </div>
-  </div>  
+    <div class="apos-event-body">{{ aposArea({ area: item.areas.body }) }}</div>
+    {% if item.tags %}
+      <div class="apos-event-tags">
+        File under:
+        {% for tag in item.tags %}
+          <a href="{{ pageUrl }}?{{ { tag: tag } | query }}">{{ tag | e }}</a>
+        {% endfor %}
+      </div>
+    {% endif %}
 {% endmacro %}
+
+{# ...or use renderEventPreviews to show previews of all items on a page (date and title) #}
+
+{% macro renderEventPreviews(items, pageUrl) %}
+  {% if items %}
+    {% for item in items %}
+      {{ renderEventPreview(item, pageUrl) }}
+    {% endfor %}
+  {% else %}
+    <h4>There are no events yet.</h4>
+  {% endif %}
+{% endmacro %}
+
+{% macro renderEventPreview(item, pageUrl) %}
+  <div class="apos-event">
+    <div class="apos-event-heading">
+      <h4><a href="{{ pageUrl }}/{{ item.slug }}">{{ item.title | e }}</a></h4>
+      <div class="blog-title-divider"></div>
+      <h6><date>{{ eventDateRange(item) }}</date></h6>
+    </div>
+  </div>
+{% endmacro %}
+
+
+{# Outputs a date and, if present, a time. The date is presented without the year unless it #}
+{# is a different year than the present year. Pass the entire timestamp, not just date, and #}
+{# pass the time (if the time is null, it is not output). See eventDateRange #}
+
+{% macro eventDateAndTime(when, timePresent) %}
+  {% if aposIsCurrentYear(when) %}
+    {{ when | date('MMM DD') }}
+  {% else %}
+    {{ when | date('MMM DD [\']YY') }}
+  {% endif %}
+  {% if (timePresent) %}
+    {{ when | date('h:mm a') }}
+  {% endif %}
+{% endmacro %}
+
+{# Copes with startDate, startTime, endDate and endTime, all but the first of which #}
+{# are optional, and outputs something reasonable for each combination #}
+
+{% macro eventDateRange(item) %}
+  {{ eventDateAndTime(item.start, item.startTime) }}
+  {% if (item.startDate != item.endDate) or (item.startTime != item.endTime) %}
+    &ndash;
+    {{ eventDateAndTime(item.end, item.endTime) }}
+  {% endif %}
+{% endmacro %}
+

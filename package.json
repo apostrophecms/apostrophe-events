@@ -27,6 +27,8 @@
     "apostrophe-snippets": "0.0.x",
     "moment": "~2.0.0",
     "geocoder": "*",
-    "qs": "~0.6.5"
+    "qs": "~0.6.5",
+    "random-words": "0.0.1",
+    "randy": "~1.4.2"
   }
 }

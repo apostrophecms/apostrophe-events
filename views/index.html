@@ -1,35 +1,62 @@
-{# TODO: THIS IS OUT OF DATE, BORROW FROM DR PROJECT AND UPDATE TO INCLUDE MONTH NAV #}
-
 {% extends "pageLayout.html" %}
 
 {% include "eventMacros.html" %}
 
+{# Keep class names in the modules prefixed and consistent. #}
+{# The blog has apos-blog-page, so this should be apos-events-page. -Tom #}
+
 {% block bodyClass %}{{ super() }} apos-events-page{% endblock %}
 
-{# Output the current content of the page, with buttons to edit it #}
+{# 'here()' returns the URL of the page, with the year and month added if we are #}
+{# viewing by month, plus any query string based on active filters. You can pass #}
+{# 'changes' to override filters. Passing null for a filter removes it. #}
 
-{% block subnav %}
-  {# Subpages? Why yes! #}
-    <ol class="children">
-    {% for relative in page.children %}
-      <li><a href="{{ relative.url }}">{{ relative.title | e }}</a></li>
-    {% endfor %}
-    </ol>
-  {# And now filters... soon... #}
-{% endblock %}
+{%- macro here(changes) -%}
+  {{ page.url | build([ 'year', 'month' ], { year: activeYear, month: activeMonth, tag: query.tag }, changes) }}
+{%- endmacro -%}
 
-{% block main %}
-  {{ aposArea({ slug: slug + ':beforeContent', area: page.areas.beforeContent, edit: edit }) }}
+{% block mainContent %}
 
-  <div class="apos-events">
-    {{ renderEvents(items, page.url) }}
+  <div class="events-filter clearfix">
+    {% if defaultView %}
+      {# Currently showing upcoming events #}
+      <h2 class="month active">Upcoming Events</h2>
+      <h2 class="month by-month-button"><a href="{{ here({ year: thisYear, month: thisMonth }) }}">Events by Month</a></h2>
+    {% else %}
+      {# Currently showing a particular month of events #}
+      <h2 class="month upcoming-button"><a href="{{ here({ year: null, month: null }) }}">Upcoming Events</a></h2>
+      <h2 class="month browse-by-month active">
+        <a class="month-previous" {#class="button previous"#} href="{{ here({ year: prevYear, month: prevMonth }) }}">&laquo;</a>
+        <span class="month current">{{ (activeYear + '-' + activeMonth + '-01') | date('MMMM YYYY') }}</span>
+        <a class="month-next" {#class="button next"#} href="{{ here({ year: nextYear, month: nextMonth }) }}">&raquo;</a>
+      </h2>
+    {% endif %}
+    {# Do not show unusable filters #}
+    {% if allTags.length %}
+      <h2>
+        <label for="type-filter">Filter</label>
+        <select id="event-filter" name="type-filter">
+          <option value="{{ here({ tag: null }) }}">All</option>
+          {%- for tag in allTags -%}
+            {%- if tag.length -%}
+              <option {% if query.tag == tag %}selected{%endif %} value="{{ here({ tag: tag }) }}">{{ tag }}</option>
+            {% endif %}
+          {% endfor %}
+        </select>
+      </h2>
+    {% endif %}
   </div>
-  {{ renderPager(pager, page.url) }}
-{% endblock %}
 
-{% block sidebar %}
+  {{ renderEventPreviews(items, page.url) }}
 
-  {# A regular free-form area follows, but with a restricted set of allowed types #}
-  {{ aposArea({ slug: slug + ':sidebar', area: page.areas.sidebar, edit: edit, controls: [ 'style', 'bold', 'italic', 'createLink', 'image', 'video' ] }) }}
+  {{ renderPager(pager, here({})) }}
+
+  <script type="text/javascript">
+    var $eventFilter = $('select#event-filter');
+
+    $eventFilter.on('change', function(event) {
+      window.location.href = $eventFilter.val();
+    });
+  </script>
 
 {% endblock %}
