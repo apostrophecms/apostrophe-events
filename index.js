@@ -142,9 +142,9 @@ events.Events = function(options, callback) {
   };
 
   self.dispatch = function(req, callback) {
-    var permalink = false;
+    var show = false;
     var criteria = {};
-    var options = {};
+    var options = { permalink: req.bestPage };
     var year, month, day;
     var byDate = false;
     if (req.remainder.length) {
@@ -154,12 +154,12 @@ events.Events = function(options, callback) {
         month = byDate[3];
         day = byDate[5];
       } else {
-        //we're trying to get a slug/permalink
+        //we're trying to get a slug ("show" page)
         criteria.slug = req.remainder.substr(1);
-        permalink = true;
+        show = true;
       }
     }
-    if (!permalink) {
+    if (!show) {
       self.addPager(req, options);
       var now = moment();
       req.extras.thisYear = now.format('YYYY');
@@ -214,26 +214,23 @@ events.Events = function(options, callback) {
         return callback(err);
       }
       var snippets = results.snippets;
-      if (permalink) {
+      req.extras.allTags = results.tags;
+      if (show) {
         if (!snippets.length) {
           req.template = 'notfound';
         } else {
           req.template = self.renderer('show');
-          snippets[0].url = self.permalink(snippets[0], req.bestPage);
           // Generic noun so we can more easily inherit templates
           req.extras.item = snippets[0];
+          return callback(null);
         }
       } else {
         self.setPagerTotal(req, results.total);
         req.template = self.renderer('index');
         // Generic noun so we can more easily inherit templates
         req.extras.items = snippets;
-        _.each(snippets, function(snippet) {
-          snippet.url = self.permalink(snippet, req.bestPage);
-        });
+        return callback(null);
       }
-      req.extras.allTags = results.tags;
-      return callback(null);
     });
   };
 
