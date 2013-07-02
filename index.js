@@ -160,8 +160,16 @@ events.Events = function(options, callback) {
       }
     }
     if (!show) {
-      self.addPager(req, options);
+      // When populating the AJAX calendar do not use a pager
+      if (!req.query.calendar) {
+        self.addPager(req, options);
+      }
       var now = moment();
+      // When populating the calendar supply current month if none specified
+      if (req.query.calendar && (!byDate)) {
+        year = now.format('YYYY');
+        month = now.format('MM');
+      }
       req.extras.thisYear = now.format('YYYY');
       req.extras.thisMonth = now.format('MM');
       // Create 'from' and 'to' dates in YYYY-MM-DD format for mongodb criteria
@@ -176,30 +184,38 @@ events.Events = function(options, callback) {
         criteria.startDate = { $lte: toDate };
         // Must not end before the beginning of the range
         criteria.endDate = { $gte: fromDate };
+      }
+      if (!byDate) {
+        // Next and previous links based on the current month and year are still
+        // useful in calendars, even if we're currently displaying an upcoming
+        // events view.
+        year = req.extras.thisYear;
+        month = req.extras.thisMonth;
+      } else {
         // For displaying the active month and year
         req.extras.activeYear = pad(year, 4);
         req.extras.activeMonth = pad(month, 2);
-        // set up the next and previous urls for our calendar
-        var nextYear = year;
-        var nextMonth = parseInt(month, 10) + 1;
-        if (nextMonth > 12) {
-          nextMonth = 1;
-          nextYear = parseInt(year, 10) + 1;
-        }
-        nextMonth = pad(nextMonth, 2);
-        req.extras.nextYear = nextYear;
-        req.extras.nextMonth = nextMonth;
-
-        var prevYear = year;
-        var prevMonth = parseInt(month, 10) - 1;
-        if (prevMonth < 1) {
-          prevMonth = 12;
-          prevYear = parseInt(year, 10) - 1;
-        }
-        prevMonth = pad(prevMonth, 2);
-        req.extras.prevYear = prevYear;
-        req.extras.prevMonth = prevMonth;
       }
+      // set up the next and previous urls for our calendar
+      var nextYear = year;
+      var nextMonth = parseInt(month, 10) + 1;
+      if (nextMonth > 12) {
+        nextMonth = 1;
+        nextYear = parseInt(year, 10) + 1;
+      }
+      nextMonth = pad(nextMonth, 2);
+      req.extras.nextYear = nextYear;
+      req.extras.nextMonth = nextMonth;
+
+      var prevYear = year;
+      var prevMonth = parseInt(month, 10) - 1;
+      if (prevMonth < 1) {
+        prevMonth = 12;
+        prevYear = parseInt(year, 10) - 1;
+      }
+      prevMonth = pad(prevMonth, 2);
+      req.extras.prevYear = prevYear;
+      req.extras.prevMonth = prevMonth;
     }
 
     function pad(s, n) {
@@ -209,6 +225,11 @@ events.Events = function(options, callback) {
     // Make sure we call addCriteria to get things like tag filtering
     self.addCriteria(req, criteria, options);
 
+    if (req.query.calendar) {
+      // We don't paginate the events for this month when displaying them in the calendar, so be sure we don't
+      // get too much stuff
+      options.fields = { _id: 1, title: 1, slug: 1, startDate: 1, startTime: 1, endDate: 1, endTime: 1, start: 1, end: 1, tags: 1 };
+    }
     self.get(req, criteria, options, function(err, results) {
       if (err) {
         return callback(err);
@@ -225,10 +246,18 @@ events.Events = function(options, callback) {
           return callback(null);
         }
       } else {
-        self.setPagerTotal(req, results.total);
-        req.template = self.renderer('index');
+        if (!req.query.calendar) {
+          self.setPagerTotal(req, results.total);
+        }
         // Generic noun so we can more easily inherit templates
         req.extras.items = snippets;
+        if (req.query.calendar) {
+          req.template = function(data) {
+            return JSON.stringify(req.extras.items);
+          };
+        } else {
+          req.template = self.renderer('index');
+        }
         return callback(null);
       }
     });
