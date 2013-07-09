@@ -35,7 +35,7 @@
     {% if allTags.length %}
       <h2>
         <label for="type-filter">Filter</label>
-        <select id="event-filter" name="type-filter">
+        <select id="snippets-tag-filter" name="type-filter">
           <option value="{{ here({ tag: null }) }}">All</option>
           {%- for tag in allTags -%}
             {%- if tag.length -%}
@@ -52,7 +52,7 @@
   {{ renderPager(pager, here({})) }}
 
   <script type="text/javascript">
-    var $eventFilter = $('select#event-filter');
+    var $eventFilter = $('select#snippets-tag-filter');
 
     $eventFilter.on('change', function(event) {
       window.location.href = $eventFilter.val();

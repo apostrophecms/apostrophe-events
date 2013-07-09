@@ -226,8 +226,7 @@ events.Events = function(options, callback) {
     self.addCriteria(req, criteria, options);
 
     if (req.query.calendar) {
-      // We don't paginate the events for this month when displaying them in the calendar, so be sure we don't
-      // get too much stuff
+      // We don't paginate the events for this month when displaying them in the calendar, so be sure we don't get too much stuff
       options.fields = { _id: 1, title: 1, slug: 1, startDate: 1, startTime: 1, endDate: 1, endTime: 1, start: 1, end: 1, tags: 1 };
     }
     self.get(req, criteria, options, function(err, results) {
