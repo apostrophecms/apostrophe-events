@@ -49,8 +49,7 @@
 
   {{ renderEventPreviews(items, page.url) }}
 
-  {# Workaround for https://github.com/jlongster/nunjucks/issues/106 #}
-  {{ renderPager(pager, (here({}))) }}
+  {{ renderPager(pager, here({})) }}
 
   <script type="text/javascript">
     var $eventFilter = $('select#snippets-tag-filter');
