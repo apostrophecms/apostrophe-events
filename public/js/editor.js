@@ -8,7 +8,6 @@ function AposEvents(optionsArg) {
   };
   $.extend(options, optionsArg);
   AposSnippets.call(self, options);
-
   function findExtraFields($el, data, callback) {
     //grab the value of the extra fields and toss them into the data object before carrying on
     data.address = $el.find('[name="address"]').val();

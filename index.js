@@ -38,6 +38,9 @@ events.Events = function(options, callback) {
     };
   }
 
+  if (options.widget === undefined) {
+    options.widget = true;
+  }
   // "They set options.widget to true, so they are hoping for a standard
   // events widget constructor."
   if (options.widget && (typeof(options.widget) !== 'function')) {
@@ -99,6 +102,12 @@ events.Events = function(options, callback) {
     });
     return s;
   });
+
+  var superAddApiCriteria = self.addApiCriteria;
+  self.addApiCriteria = function(query, criteria, options) {
+    superAddApiCriteria.call(self, query, criteria, options);
+    options.sort = { startDate: -1 };
+  };
 
   self.getUTCDateRange = function(e) {
     return self.getVCalTimestamp(e.start) + '/' + self.getVCalTimestamp(e.end);
