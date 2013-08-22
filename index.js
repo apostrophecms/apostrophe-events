@@ -244,6 +244,7 @@ events.Events = function(options, callback) {
       }
       var snippets = results.snippets;
       req.extras.allTags = results.tags;
+      req.extras.filters = _.omit(results, 'snippets');
       if (show) {
         if (!snippets.length) {
           req.template = 'notfound';
@@ -252,7 +253,8 @@ events.Events = function(options, callback) {
           req.template = self.renderer('show');
           // Generic noun so we can more easily inherit templates
           req.extras.item = snippets[0];
-          return callback(null);
+          // An easy place to add more behavior
+          return self.beforeShow(req, snippets[0], callback);
         }
       } else {
         if (!req.query.calendar) {
@@ -267,7 +269,8 @@ events.Events = function(options, callback) {
         } else {
           req.template = self.renderer('index');
         }
-        return callback(null);
+        // An easy place to add more behavior
+        return self.beforeIndex(req, snippets, callback);
       }
     });
   };
