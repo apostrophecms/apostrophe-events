@@ -269,7 +269,7 @@ events.Events = function(options, callback) {
         } else {
           req.template = self.renderer('index');
         }
-        self.setIndexTemplateName(req);
+        self.setIndexTemplate(req);
         // An easy place to add more behavior
         return self.beforeIndex(req, snippets, callback);
       }
