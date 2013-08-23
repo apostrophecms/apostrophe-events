@@ -262,18 +262,22 @@ events.Events = function(options, callback) {
         }
         // Generic noun so we can more easily inherit templates
         req.extras.items = snippets;
-        if (req.query.calendar) {
-          req.template = function(data) {
-            return JSON.stringify(req.extras.items);
-          };
-        } else {
-          req.template = self.renderer('index');
-        }
         self.setIndexTemplate(req);
         // An easy place to add more behavior
         return self.beforeIndex(req, snippets, callback);
       }
     });
+  };
+
+  var superSetIndexTemplate = self.setIndexTemplate;
+  self.setIndexTemplate = function(req) {
+    superSetIndexTemplate(req);
+    if (req.query.calendar) {
+      // Render JSON data instead for use in clndr
+      req.template = function(data) {
+        return JSON.stringify(req.extras.items);
+      };
+    }
   };
 
   // Establish the default sort order for events
