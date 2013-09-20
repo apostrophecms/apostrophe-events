@@ -70,7 +70,8 @@
 {% endmacro %}
 
 {# Copes with startDate, startTime, endDate and endTime, all but the first of which #}
-{# are optional, and outputs something reasonable for each combination #}
+{# are optional, and outputs something reasonable for each combination. NOTE: #}
+{# RSS feeds use this. #}
 
 {% macro eventDateRange(item) %}
   {{ eventDateAndTime(item.start, item.startTime) }}

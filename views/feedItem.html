@@ -1,0 +1,13 @@
+{% include "feedMacros.html" %}
+{% include "eventMacros.html" %}
+
+{# Remember, the title and the publication date are already in the feed. We are only #}
+{# responsible for rendering the body of the item, and any additional information #}
+{# such as the thumbnail etc. that feels appropriate to the application. #}
+{# `options.summary` and `options.characters` can be configured when initializing #}
+{# the module, as properties of the `feed` option. You may choose to completely #}
+{# ignore them when overriding this template. #}
+
+<h4>{{ eventDateRange(item) }}</h4>
+{{ feedThumbnail(item) }}
+{{ feedBody(item) }}
