@@ -55,40 +55,10 @@ events.Events = function(options, callback) {
     snippet.link = self._apos.sanitizeString(data.link);
 
     snippet.startDate = self._apos.sanitizeDate(data.startDate || data.date);
-    var startDateMoment;
-    try {
-      startDateMoment = moment(snippet.startDate);
-      snippet.startMonth = startDateMoment.format('MMM');
-      snippet.numberMonth = startDateMoment.format('M');
-      snippet.startDay = startDateMoment.format('DD');
-    } catch(e) {
-      console.log("DATE ERROR IS:");
-      console.log(e);
-      console.log('startDate was:');
-      console.log(snippet.startDate);
-      console.log("data is:");
-      console.log(data);
-    }
-
     snippet.startTime = self._apos.sanitizeTime(data.startTime || data.time, null);
-    if (snippet.startTime === null) {
-      // Make sure we specify midnight, if we leave off the time entirely we get
-      // midnight UTC, not midnight local time
-      snippet.start = new Date(snippet.startDate + ' 00:00:00');
-    } else {
-      snippet.start = new Date(snippet.startDate + ' ' + snippet.startTime);
-    }
-
     snippet.endDate = self._apos.sanitizeDate(data.endDate, snippet.startDate);
     snippet.endTime = self._apos.sanitizeTime(data.endTime, snippet.startTime);
-    if (snippet.endTime === null) {
-      // Make sure we specify midnight, if we leave off the time entirely we get
-      // midnight UTC, not midnight local time
-      snippet.end = new Date(snippet.endDate + ' 00:00:00');
-    } else {
-      snippet.end = new Date(snippet.endDate + ' ' + snippet.endTime);
-    }
-
+    return self.denormalizeDates(snippet);
     return callback();
   }
 
@@ -107,6 +77,38 @@ events.Events = function(options, callback) {
   self.addApiCriteria = function(query, criteria, options) {
     superAddApiCriteria.call(self, query, criteria, options);
     options.sort = { startDate: -1 };
+  };
+
+  self.denormalizeDates = function(snippet) {
+    var startDateMoment;
+    try {
+      startDateMoment = moment(snippet.startDate);
+      snippet.startMonth = startDateMoment.format('MMM');
+      snippet.numberMonth = startDateMoment.format('M');
+      snippet.startDay = startDateMoment.format('DD');
+    } catch(e) {
+      console.log("DATE ERROR IS:");
+      console.log(e);
+      console.log('startDate was:');
+      console.log(snippet.startDate);
+      console.log("data is:");
+      console.log(data);
+    }
+
+    if (snippet.startTime === null) {
+      // Make sure we specify midnight, if we leave off the time entirely we get
+      // midnight UTC, not midnight local time
+      snippet.start = new Date(snippet.startDate + ' 00:00:00');
+    } else {
+      snippet.start = new Date(snippet.startDate + ' ' + snippet.startTime);
+    }
+    if (snippet.endTime === null) {
+      // Make sure we specify midnight, if we leave off the time entirely we get
+      // midnight UTC, not midnight local time
+      snippet.end = new Date(snippet.endDate + ' 00:00:00');
+    } else {
+      snippet.end = new Date(snippet.endDate + ' ' + snippet.endTime);
+    }
   };
 
   self.getUTCDateRange = function(e) {
@@ -324,6 +326,12 @@ events.Events = function(options, callback) {
       });
       return callback(null, results);
     });
+  };
+
+  var superBeforePutOne = self.beforePutOne;
+  self.beforePutOne = function(req, slug, snippet, callback) {
+    self.denormalizeDates(snippet);
+    return superBeforePutOne(req, slug, snippet, callback);
   };
 
   self.getDefaultTitle = function() {
