@@ -58,7 +58,6 @@ events.Events = function(options, callback) {
     snippet.startTime = self._apos.sanitizeTime(data.startTime || data.time, null);
     snippet.endDate = self._apos.sanitizeDate(data.endDate, snippet.startDate);
     snippet.endTime = self._apos.sanitizeTime(data.endTime, snippet.startTime);
-    return self.denormalizeDates(snippet);
     return callback();
   }
 
