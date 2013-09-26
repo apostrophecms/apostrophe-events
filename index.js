@@ -185,7 +185,8 @@ events.Events = function(options, callback) {
       // Create 'from' and 'to' dates in YYYY-MM-DD format for mongodb criteria
       if (!byDate) {
         // If we're not browsing by month, simply show upcoming events
-        options.upcoming = true;
+        // options.upcoming = true;
+        self.setOptionsForDefaultView(options);
         req.extras.defaultView = true;
       } else {
         fromDate = pad(year, 4) + '-' + pad(month, 2) + '-01';
@@ -269,6 +270,11 @@ events.Events = function(options, callback) {
       }
     });
   };
+
+  self.setOptionsForDefaultView = function(options) {
+    options.upcoming = true;
+  };
+
 
   var superSetIndexTemplate = self.setIndexTemplate;
   self.setIndexTemplate = function(req) {
@@ -355,7 +361,7 @@ events.Events = function(options, callback) {
   var superAddExtraAutocompleteCriteria = self.addExtraAutocompleteCriteria;
   self.addExtraAutocompleteCriteria = function(req, criteria) {
     superAddExtraAutocompleteCriteria.call(self, req, criteria);
-    options.upcoming = true;
+    self.setOptionsForDefaultView(options);
   };
 
   function addRoutes() {
@@ -506,6 +512,6 @@ events.widget = function(options) {
   var superAddCriteria = self.addCriteria;
   self.addCriteria = function(item, criteria, options) {
     superAddCriteria.call(self, item, criteria, options);
-    options.upcoming = true;
+    self.snippets.setOptionsForDefaultView(options);
   };
 };
