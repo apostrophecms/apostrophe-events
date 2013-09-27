@@ -8,6 +8,10 @@ function AposEvents(optionsArg) {
   };
   $.extend(options, optionsArg);
   AposSnippets.call(self, options);
+
+  // Add a filter for dates
+  self.filters['date'] = 'all';
+
   function findExtraFields($el, data, callback) {
     //grab the value of the extra fields and toss them into the data object before carrying on
     data.address = $el.find('[name="address"]').val();
