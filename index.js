@@ -73,9 +73,22 @@ events.Events = function(options, callback) {
   });
 
   var superAddApiCriteria = self.addApiCriteria;
+  // Add support for browsing past, future or all events
   self.addApiCriteria = function(query, criteria, options) {
     superAddApiCriteria.call(self, query, criteria, options);
-    options.sort = { startDate: -1 };
+    if (query.date !== undefined) {
+      if (query.date === 'past') {
+        criteria.startDate = { $lte: moment().format('YYYY-MM-DD') };
+        options.sort = { startDate: -1 };
+      } else if (query.date === 'future') {
+        criteria.startDate = { $gte: moment().format('YYYY-MM-DD') };
+        options.sort = { startDate: 1 };
+      } else {
+        // Default behavior works for 'all'
+      }
+    } else {
+      options.sort = { startDate: -1 };
+    }
   };
 
   self.denormalizeDates = function(snippet) {

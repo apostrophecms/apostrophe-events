@@ -5,7 +5,10 @@
   <div class="apos-modal-body">
     <a href="#" class="apos-control apos-button apos-new-button apos-new-snippet-button" data-new-event>New Event</a>
     <div class="apos-modal-filters">
-      {{ snippetFilters() }}
+      {{ snippetTrashFilter() }}
+      {{ snippetPublishedFilter() }}
+      {{ snippetDateFilter() }}
+      {{ snippetSearchFilter() }}
     </div>
     <table data-items class="apos-manage-table">
       <tr>

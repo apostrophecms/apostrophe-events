@@ -54,6 +54,7 @@ function AposEvents(optionsArg) {
   self.beforeUpdate = function($el, data, callback) {
     findExtraFields($el, data, callback);
   };
+  self.filters.date = 'all';
 }
 
 AposEvents.addWidgetType = function(options) {
