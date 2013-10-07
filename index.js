@@ -438,79 +438,81 @@ events.Events = function(options, callback) {
     return s;
   };
 
-  self._apos.tasks['generate-events'] = function(callback) {
-    var randomWords = require('random-words');
-    var i;
-    var events = [];
-    // The various events get 0-5 tags drawn from this pool
-    // so there is a decent amount of overlap
-    var tags = randomWords(50);
-    // A good spread of events over the next year, with a small percentage
-    // in the previous 60 days
-    for (i = 0; (i < 100); i++) {
-      // Use an inner function and pass 'i' to it, so that we
-      // get a new closure and 'startTime' and 'endTime' are
-      // undefined at the start of each pass. Otherwise all the
-      // events have times. This is really subtle: a 'var' with
-      // an assignment applies its assignment on every pass through
-      // a for loop but a 'var' without one doesn't implicitly
-      // assign 'undefined'. Basically: 'var' anywhere but the
-      // start of a function is really evil and confusing.
-      (function(i) {
-        var title = randomWords({ min: 5, max: 10, join: ' ' });
-        var start = new Date();
-        // TODO: why do we wind up with random minutes still?
-        start.setHours(0, 0, 0, 0);
-        start.setDate(start.getDate() + Math.floor(Math.random() * (365 + 60)) - 60);
-        var startDate = moment(start).format('YYYY-MM-DD');
-        var startTime;
-        var endTime;
-        // Make sure we get a new object for the end so we're not just
-        // changing the same object
-        var end = new Date(start);
-        // One-fifth of events are multiday
-        if (Math.random() < 0.2) {
-          end.setDate(end.getDate() + Math.floor(Math.random() * 5) + 1);
-        }
-        endDate = moment(end).format('YYYY-MM-DD');
-        // One-half of events are not full-day
-        if (Math.random() < 0.5) {
-          start.setHours(Math.floor(Math.random() * 23));
-          startTime = moment(start).format('hh:mm');
-          end.setHours(start.getHours() + 1);
-          endTime = moment(end).format('hh:mm');
-        }
-        var at = new Date();
-        var eventTags = randy.shuffle(tags).slice(0, Math.floor(Math.random() * 5));
-        events.push({
-          type: 'event',
-          title: title,
-          tags: eventTags,
-          slug: self._apos.slugify(title),
-          testData: true,
-          start: start,
-          startDate: startDate,
-          startTime: startTime,
-          end: end,
-          endDate: endDate,
-          endTime: endTime,
-          address: '1168 E. Passyunk Ave. Philadelphia, PA 19147',
-          areas: {
-            body: {
-              items: [
-                {
-                  type: 'richText',
-                  content: randomWords({ min: 50, max: 200, join: ' ' })
-                }
-              ]
-            }
-          },
-          published: true
-        });
-      })(i);
-    }
-    self._apos.pages.insert(events, callback);
-  };
+  self._apos.on('tasks:register', function(taskGroups) {
+    taskGroups.apostrophe.generateEvents = function(apos, argv, callback) {
+      var randomWords = require('random-words');
+      var i;
+      var events = [];
+      // The various events get 0-5 tags drawn from this pool
+      // so there is a decent amount of overlap
+      var tags = randomWords(50);
+      // A good spread of events over the next year, with a small percentage
+      // in the previous 60 days
+      for (i = 0; (i < 100); i++) {
+        // Use an inner function and pass 'i' to it, so that we
+        // get a new closure and 'startTime' and 'endTime' are
+        // undefined at the start of each pass. Otherwise all the
+        // events have times. This is really subtle: a 'var' with
+        // an assignment applies its assignment on every pass through
+        // a for loop but a 'var' without one doesn't implicitly
+        // assign 'undefined'. Basically: 'var' anywhere but the
+        // start of a function is really evil and confusing.
+        (function(i) {
+          var title = randomWords({ min: 5, max: 10, join: ' ' });
+          var start = new Date();
+          // TODO: why do we wind up with random minutes still?
+          start.setHours(0, 0, 0, 0);
+          start.setDate(start.getDate() + Math.floor(Math.random() * (365 + 60)) - 60);
+          var startDate = moment(start).format('YYYY-MM-DD');
+          var startTime;
+          var endTime;
+          // Make sure we get a new object for the end so we're not just
+          // changing the same object
+          var end = new Date(start);
+          // One-fifth of events are multiday
+          if (Math.random() < 0.2) {
+            end.setDate(end.getDate() + Math.floor(Math.random() * 5) + 1);
+          }
+          endDate = moment(end).format('YYYY-MM-DD');
+          // One-half of events are not full-day
+          if (Math.random() < 0.5) {
+            start.setHours(Math.floor(Math.random() * 23));
+            startTime = moment(start).format('hh:mm');
+            end.setHours(start.getHours() + 1);
+            endTime = moment(end).format('hh:mm');
+          }
+          var at = new Date();
+          var eventTags = randy.shuffle(tags).slice(0, Math.floor(Math.random() * 5));
+          events.push({
+            type: 'event',
+            title: title,
+            tags: eventTags,
+            slug: self._apos.slugify(title),
+            testData: true,
+            start: start,
+            startDate: startDate,
+            startTime: startTime,
+            end: end,
+            endDate: endDate,
+            endTime: endTime,
+            address: '1168 E. Passyunk Ave. Philadelphia, PA 19147',
+            areas: {
+              body: {
+                items: [
+                  {
+                    type: 'richText',
+                    content: randomWords({ min: 50, max: 200, join: ' ' })
+                  }
+                ]
+              }
+            },
+            published: true
+          });
+        })(i);
+      }
+      self._apos.pages.insert(events, callback);
+    };
+  });
 
   if (callback) {
     process.nextTick(function() { return callback(null); });
