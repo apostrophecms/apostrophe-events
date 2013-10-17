@@ -316,8 +316,11 @@ events.Events = function(options, callback) {
     // 3-day event that is 1 day in will not show up, which is too harsh.
     // Summer-long events can be tedious in this sort of system but there's
     // only so much one can do about that.
+    //
+    // Do it by date, not timestamp, so that we don't fail to show an
+    // all-day event taking place today.
     if (options.upcoming) {
-      filterCriteria.end = { $gte: new Date() };
+      filterCriteria.endDate = { $gte: moment().format('YYYY-MM-DD') };
     }
     return superGet.call(self, req, { $and: [ userCriteria, filterCriteria ] }, options, function(err, results) {
       if (err) {
