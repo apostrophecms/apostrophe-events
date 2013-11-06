@@ -487,6 +487,7 @@ events.Events = function(options, callback) {
           var at = new Date();
           var eventTags = randy.shuffle(tags).slice(0, Math.floor(Math.random() * 5));
           events.push({
+            _id: self._apos.generateId(),
             type: 'event',
             title: title,
             tags: eventTags,
