@@ -80,15 +80,16 @@ events.Events = function(options, callback) {
       if (query.date === 'past') {
         criteria.startDate = { $lte: moment().format('YYYY-MM-DD') };
         options.sort = { startDate: -1 };
+        return;
       } else if (query.date === 'future') {
         criteria.startDate = { $gte: moment().format('YYYY-MM-DD') };
         options.sort = { startDate: 1 };
+        return;
       } else {
         // Default behavior works for 'all'
       }
-    } else {
-      options.sort = { startDate: -1 };
     }
+    options.sort = { startDate: -1 };
   };
 
   self.denormalizeDates = function(snippet) {
