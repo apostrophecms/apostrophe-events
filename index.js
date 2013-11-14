@@ -18,7 +18,8 @@ events.Events = function(options, callback) {
   _.defaults(options, {
     instance: 'event',
     name: options.name || 'events',
-    label: options.name || 'Events',
+    instanceLabel: options.instanceLabel || 'Event',
+    label: options.label || 'Events',
     icon: options.icon || 'events',
     menuName: 'aposEventsMenu'
   });
