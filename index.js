@@ -352,9 +352,9 @@ events.Events = function(options, callback) {
   };
 
   var superBeforePutOne = self.beforePutOne;
-  self.beforePutOne = function(req, slug, snippet, callback) {
+  self.beforePutOne = function(req, slug, options, snippet, callback) {
     self.denormalizeDates(snippet);
-    return superBeforePutOne(req, slug, snippet, callback);
+    return superBeforePutOne(req, slug, options, snippet, callback);
   };
 
   self.getDefaultTitle = function() {
