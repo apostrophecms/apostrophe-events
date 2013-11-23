@@ -12,32 +12,6 @@ function AposEvents(optionsArg) {
   // Add a filter for dates
   self.filters['date'] = 'all';
 
-  function findExtraFields($el, data, callback) {
-    //grab the value of the extra fields and toss them into the data object before carrying on
-    data.address = $el.find('[name="address"]').val();
-
-    //date/times
-    data.startDate = $el.find('[name="start-date"]').val();
-    data.startTime = $el.find('[name="start-time"]').val();
-    data.endDate = $el.find('[name="end-date"]').val();
-    data.endTime = $el.find('[name="end-time"]').val();
-    
-    callback();
-  }
-
-  self.afterPopulatingEditor = function($el, snippet, callback) {
-    $el.find('[name="address"]').val(snippet.address);
-    $el.find('[name="start-date"]').val(snippet.startDate);
-    $el.find('[name="start-time"]').val(apos.formatTime(snippet.startTime));
-    $el.find('[name="end-date"]').val(snippet.endDate);
-    $el.find('[name="end-time"]').val(apos.formatTime(snippet.endTime));
-
-    apos.enhanceDate($el.findByName('start-date'), { $minFor: $el.findByName('end-date') });
-    apos.enhanceDate($el.findByName('end-date'), { $maxFor: $el.findByName('start-date') });
-
-    callback();
- };
-
   self.addingToManager = function($el, $snippet, snippet) {
     $snippet.find('[data-date]').text(snippet.startDate);
     var status;
@@ -51,13 +25,6 @@ function AposEvents(optionsArg) {
     $snippet.find('[data-status]').text(status);
   };
 
-  self.beforeInsert = function($el, data, callback) {
-    findExtraFields($el, data, callback);
-  };
-
-  self.beforeUpdate = function($el, data, callback) {
-    findExtraFields($el, data, callback);
-  };
   self.filters.date = 'all';
 }
 

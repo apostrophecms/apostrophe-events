@@ -24,6 +24,48 @@ events.Events = function(options, callback) {
     menuName: 'aposEventsMenu'
   });
 
+  options.addFields = [
+    {
+      after: 'title',
+      name: 'startDate',
+      label: 'Start Date',
+      type: 'date',
+      // Old, pre-schema field name, do not use this feature in new modules
+      legacy: 'start-date'
+    },
+    {
+      name: 'startTime',
+      label: 'Start Time',
+      type: 'time',
+      // Old, pre-schema field name, do not use this feature in new modules
+      legacy: 'start-time'
+    },
+    {
+      name: 'endDate',
+      label: 'End Date',
+      type: 'date',
+      // Old, pre-schema field name, do not use this feature in new modules
+      legacy: 'end-date'
+    },
+    {
+      name: 'endTime',
+      label: 'End Time',
+      type: 'time',
+      // Old, pre-schema field name, do not use this feature in new modules
+      legacy: 'end-time'
+    },
+    {
+      end: true,
+      name: 'address',
+      label: 'Address',
+      type: 'string'
+    }
+  ].concat(options.addFields || []);
+
+  options.removeFields = [
+    'hideTitle'
+  ].concat(options.removeFields || []);
+
   options.modules = (options.modules || []).concat([ { dir: __dirname, name: 'events' } ]);
 
   // TODO this is kinda ridiculous. We need to have a way to call a function that
@@ -49,18 +91,6 @@ events.Events = function(options, callback) {
   }
 
   snippets.Snippets.call(this, options, null);
-
-  function appendExtraFields(data, snippet, callback) {
-    // Be tolerant of common field names
-    snippet.address = self._apos.sanitizeString(data.address || data.location);
-    snippet.link = self._apos.sanitizeString(data.link);
-
-    snippet.startDate = self._apos.sanitizeDate(data.startDate || data.date);
-    snippet.startTime = self._apos.sanitizeTime(data.startTime || data.time, null);
-    snippet.endDate = self._apos.sanitizeDate(data.endDate, snippet.startDate);
-    snippet.endTime = self._apos.sanitizeTime(data.endTime, snippet.startTime);
-    return callback();
-  }
 
   self._apos.addLocal('aposEventGoogle', function(e) {
     var s = 'http://www.google.com/calendar/event?' + qs.stringify({
@@ -156,14 +186,6 @@ events.Events = function(options, callback) {
     if (snippet.link) {
       lines.push('link: ' + snippet.link);
     }
-  };
-
-  self.beforeInsert = function(req, data, snippet, callback) {
-    appendExtraFields(data, snippet, callback);
-  };
-
-  self.beforeUpdate = function(req, data, snippet, callback) {
-    appendExtraFields(data, snippet, callback);
   };
 
   self.dispatch = function(req, callback) {
