@@ -514,6 +514,7 @@ events.Events = function(options, callback) {
             _id: self._apos.generateId(),
             type: 'event',
             title: title,
+            sortTitle: self._apos.sortify(title),
             tags: eventTags,
             slug: self._apos.slugify(title),
             testData: true,
