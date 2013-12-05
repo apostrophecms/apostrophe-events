@@ -38,7 +38,9 @@ events.Events = function(options, callback) {
       label: 'Start Time',
       type: 'time',
       // Old, pre-schema field name, do not use this feature in new modules
-      legacy: 'start-time'
+      legacy: 'start-time',
+      // We don't want "now" so be explicit that null is OK
+      def: null
     },
     {
       name: 'endDate',
@@ -52,7 +54,9 @@ events.Events = function(options, callback) {
       label: 'End Time',
       type: 'time',
       // Old, pre-schema field name, do not use this feature in new modules
-      legacy: 'end-time'
+      legacy: 'end-time',
+      // We don't want "now" so be explicit that null is OK
+      def: null
     },
     {
       end: true,
