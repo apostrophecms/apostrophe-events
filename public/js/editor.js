@@ -9,8 +9,11 @@ function AposEvents(optionsArg) {
   $.extend(options, optionsArg);
   AposSnippets.call(self, options);
 
-  // Add a filter for dates
-  self.filters['date'] = 'all';
+  if (self.manager) {
+    // Add a filter for dates
+    self.filters['date'] = 'all';
+    self.filters.date = 'all';
+  }
 
   self.addingToManager = function($el, $snippet, snippet) {
     $snippet.find('[data-date]').text(snippet.startDate);
@@ -25,7 +28,6 @@ function AposEvents(optionsArg) {
     $snippet.find('[data-status]').text(status);
   };
 
-  self.filters.date = 'all';
 }
 
 AposEvents.addWidgetType = function(options) {
