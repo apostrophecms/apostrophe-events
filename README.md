@@ -6,3 +6,6 @@
 
 An RSS feed is included, with autodiscovery for browsers that support it (not many these days alas).
 
+### Code Stability
+
+0.4.x releases receive bug fixes only. For active development, follow 0.5.x releases and/or the master branch in github.
