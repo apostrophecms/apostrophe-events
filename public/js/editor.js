@@ -30,15 +30,3 @@ function AposEvents(optionsArg) {
 
 }
 
-AposEvents.addWidgetType = function(options) {
-  if (!options) {
-    options = {};
-  }
-  _.defaults(options, {
-    name: 'events',
-    label: 'Events',
-    action: '/apos-events',
-    defaultLimit: 5
-  });
-  AposSnippets.addWidgetType(options);
-};
