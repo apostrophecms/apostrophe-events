@@ -1,10 +1,10 @@
 {% macro eventSnippet (snippet) %}
-   <div class="event event-excerpt{%if aposAreaIsEmpty({ area: snippet.areas.thumbnail })%} no-thumbnail{%endif%}">
+   <div class="event event-excerpt{%if aposAreaIsEmpty({ area: snippet.thumbnail })%} no-thumbnail{%endif%}">
     <div class="event-info info-overlay">
       {% if snippet.url %}
         <a class="event-thumbnail-link" href="{{ snippet.url }}">
       {% endif %}
-        {{ aposSingleton({ slug: snippet.slug + ':thumbnail', type: 'slideshow', area: snippet.areas.thumbnail, edit: false, size: 'one-sixth' }) }}
+        {{ aposSingleton({ slug: snippet.slug + ':thumbnail', type: 'slideshow', area: snippet.thumbnail, edit: false, size: 'one-sixth' }) }}
         <date class="date">
           <span class="month">{{ snippet.startMonth }}</span>
           <span class="day">{{ snippet.startDay }}</span>
@@ -30,7 +30,7 @@
       <div class="event-body">
        {{ snippet.organizer }}
        <div class="event-information">
-        {{ aposArea({ area: snippet.areas.body, edit: false }) }}
+        {{ aposArea({ area: snippet.body, edit: false }) }}
        </div>
       </div>
     </div>

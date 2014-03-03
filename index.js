@@ -102,7 +102,7 @@ events.Events = function(options, callback) {
       dates: self.getUTCDateRange(e),
       action: 'TEMPLATE',
       location: e._place ? e._place.address : e.address,
-      details: self._apos.getAreaPlaintext({ area: e.areas.body, truncate: 500 })
+      details: self._apos.getAreaPlaintext({ area: e.body, truncate: 500 })
     });
     return s;
   });
@@ -431,7 +431,7 @@ events.Events = function(options, callback) {
         var start = self.getVCalTimestamp(event.start);
         var end = self.getVCalTimestamp(event.end);
         var title = self.textToVcal(event.title);
-        var body = self.textToVcal(self._apos.getAreaPlaintext({ area: event.areas.body }));
+        var body = self.textToVcal(self._apos.getAreaPlaintext({ area: event.body }));
         var location = self.textToVcal(self.getEventAddress(event));
         var uid = event._id;
         // A hack because we don't have publication dates for events (so far)
@@ -533,15 +533,14 @@ events.Events = function(options, callback) {
             endDate: endDate,
             endTime: endTime,
             address: '1168 E. Passyunk Ave. Philadelphia, PA 19147',
-            areas: {
-              body: {
-                items: [
-                  {
-                    type: 'richText',
-                    content: randomWords({ min: 50, max: 200, join: ' ' })
-                  }
-                ]
-              }
+            body: {
+              type: 'area',
+              items: [
+                {
+                  type: 'richText',
+                  content: randomWords({ min: 50, max: 200, join: ' ' })
+                }
+              ]
             },
             published: true
           });
