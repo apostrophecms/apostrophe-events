@@ -20,7 +20,7 @@
       <div class="blog-title-divider"></div>
       <h6><date>{{ eventDateRange(item) }}</date></h6>
     </div>
-    <div class="apos-event-body">{{ aposArea({ area: item.areas.body }) }}</div>
+    <div class="apos-event-body">{{ aposArea(item, 'body') }}</div>
     {% if item.tags %}
       <div class="apos-event-tags">
         {{ __('File under') }}:
