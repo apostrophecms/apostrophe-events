@@ -293,7 +293,7 @@ events.Events = function(options, callback) {
           req.template = 'notfound';
           return callback(null);
         } else {
-          req.template = self.renderer('show');
+          req.template = self.renderer('show', req);
           // Generic noun so we can more easily inherit templates
           req.extras.item = snippets[0];
           // An easy place to add more behavior
