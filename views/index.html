@@ -20,11 +20,11 @@
   <div class="snippets-filter clearfix">
     {% if defaultView %}
       {# Currently showing upcoming events #}
-      <h2 class="month active">Upcoming Events</h2>
-      <h2 class="month by-month-button"><a href="{{ here({ year: thisYear, month: thisMonth }) }}">Events by Month</a></h2>
+      <h2 class="month active">{{ __('Upcoming Events') }}</h2>
+      <h2 class="month by-month-button"><a href="{{ here({ year: thisYear, month: thisMonth }) }}">{{ __('Events by Month') }}</a></h2>
     {% else %}
       {# Currently showing a particular month of events #}
-      <h2 class="month upcoming-button"><a href="{{ here({ year: null, month: null }) }}">Upcoming Events</a></h2>
+      <h2 class="month upcoming-button"><a href="{{ here({ year: null, month: null }) }}">{{ __('Upcoming Events') }}</a></h2>
       <h2 class="month browse-by-month active">
         <a class="month-previous" {#class="button previous"#} href="{{ here({ year: prevYear, month: prevMonth }) }}">&laquo;</a>
         <span class="month current">{{ (activeYear + '-' + activeMonth + '-01') | date('MMMM YYYY') }}</span>
@@ -34,9 +34,9 @@
     {# Do not show unusable filters #}
     {% if allTags.length %}
       <h2>
-        <label for="type-filter">Filter</label>
+        <label for="type-filter">{{ __('Filter') }}</label>
         <select id="snippets-tag-filter" name="type-filter">
-          <option value="{{ here({ tag: null }) }}">All</option>
+          <option value="{{ here({ tag: null }) }}">{{ __('All') }}</option>
           {%- for tag in allTags -%}
             {%- if tag.length -%}
               <option {% if query.tag == tag %}selected{%endif %} value="{{ here({ tag: tag }) }}">{{ tag }}</option>
@@ -57,9 +57,9 @@
     {% endblock %}
 
     {% if filteredFeed != fullFeed %}
-      <h4><a href="{{ filteredFeed }}"><img src="/apos-snippets/images/feed-icon-16x16.png" /> Filtered RSS Feed</a></h4>
+      <h4><a href="{{ filteredFeed }}"><img src="/apos-snippets/images/feed-icon-16x16.png" /> {{ __('Filtered RSS Feed') }}</a></h4>
     {% endif %}
-    <h4><a href="{{ fullFeed }}"><img src="/apos-snippets/images/feed-icon-16x16.png" /> Full RSS Feed</a></h4>
+    <h4><a href="{{ fullFeed }}"><img src="/apos-snippets/images/feed-icon-16x16.png" /> {{ __('Full RSS Feed') }}</a></h4>
   </div>
 
   {{ renderEventPreviews(items, page.url) }}

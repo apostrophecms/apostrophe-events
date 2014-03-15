@@ -16,14 +16,14 @@
 
     <div class="event-content">
       <header class="event-heading">
-        <h5 class="event-category">Event</h5>
+        <h5 class="event-category">{{ __('Event') }}</h5>
         <h4 class="event-title">
           {% if snippet.url %}
             <a href="{{ snippet.url }}">
           {% endif %}
           {{ snippet.title | e }}
           {% if snippet.url %}
-            </a>  
+            </a>
           {% endif %}
         </h4>
       </header>
@@ -34,7 +34,7 @@
        </div>
       </div>
     </div>
-    <a href="{{ snippet.url }}" class="event-more clearfix">View Details</a>
+    <a href="{{ snippet.url }}" class="event-more clearfix">{{ __('View Details') }}</a>
   </div>
 {% endmacro %}
 
