@@ -306,6 +306,10 @@ events.Events = function(options, callback) {
         // Generic noun so we can more easily inherit templates
         req.extras.items = snippets;
         self.setIndexTemplate(req);
+        if (req.xhr && (req.query.page > 1) && (!snippets.length)) {
+          req.notfound = true;
+          return callback(null);
+        }
         // An easy place to add more behavior
         return self.beforeIndex(req, snippets, callback);
       }
