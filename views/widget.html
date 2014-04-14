@@ -4,11 +4,11 @@
       {% if snippet.url %}
         <a class="event-thumbnail-link" href="{{ snippet.url }}">
       {% endif %}
-        {{ aposSingleton({ slug: snippet.slug + ':thumbnail', type: 'slideshow', area: snippet.thumbnail, edit: false, size: 'one-sixth' }) }}
-        <date class="date">
-          <span class="month">{{ snippet.startMonth }}</span>
-          <span class="day">{{ snippet.startDay }}</span>
-        </date>
+      {{ aposSingleton({ slug: snippet.slug + ':thumbnail', type: 'slideshow', area: snippet.thumbnail, edit: false, size: 'one-sixth' }) }}
+      <date class="date">
+        <span class="month">{{ snippet.startMonth }}</span>
+        <span class="day">{{ snippet.startDay }}</span>
+      </date>
       {% if snippet.url %}
         </a>
       {% endif %}
