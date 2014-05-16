@@ -230,8 +230,8 @@ events.Events = function(options, callback) {
         self.setOptionsForDefaultView(options);
         req.extras.defaultView = true;
       } else {
-        fromDate = pad(year, 4) + '-' + pad(month, 2) + '-01';
-        toDate = pad(year, 4) + '-' + pad(month, 2) + '-31';
+        fromDate = pad(year, 4) + '-' + pad(month, 2) + '-' + (day ? day : '01');
+        toDate = pad(year, 4) + '-' + pad(month, 2) + '-' + (day ? day : '31');
         // Must start before the end of the range
         criteria.startDate = { $lte: toDate };
         // Must not end before the beginning of the range
