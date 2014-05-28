@@ -20,7 +20,7 @@ events.Events = function(options, callback) {
     name: options.name || 'events',
     instanceLabel: options.instanceLabel || 'Event',
     label: options.label || 'Events',
-    icon: options.icon || 'events',
+    icon: options.icon || 'icon-events',
     menuName: 'aposEventsMenu'
   });
 
