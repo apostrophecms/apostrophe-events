@@ -1,6 +1,6 @@
 {
   "name": "apostrophe-events",
-  "version": "0.5.13",
+  "version": "0.5.14",
   "description": "Calendar of events for the Apostrophe content management system",
   "main": "index.js",
   "scripts": {
