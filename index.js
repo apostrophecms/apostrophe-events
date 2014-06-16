@@ -21,7 +21,21 @@ events.Events = function(options, callback) {
     instanceLabel: options.instanceLabel || 'Event',
     label: options.label || 'Events',
     icon: options.icon || 'icon-events',
-    menuName: 'aposEventsMenu'
+    menuName: 'aposEventsMenu',
+    groupFields: [
+      {
+        name: 'eventDetails',
+        label: 'Event Details',
+        icon: 'content',
+        fields: ['title', 'published', 'startDate', 'startTime', 'endDate', 'endTime', 'address']
+      },
+      {
+        name: 'content',
+        label: 'Content',
+        icon: 'content',
+        fields: ['body', 'thumbnail', 'tags']
+      }
+    ]
   });
 
   options.addFields = [
