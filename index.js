@@ -421,7 +421,7 @@ events.Events = function(options, callback) {
   // Autocomplete should not show past events, it makes it very hard to find
   // any upcoming events
   var superAddExtraAutocompleteCriteria = self.addExtraAutocompleteCriteria;
-  self.addExtraAutocompleteCriteria = function(req, criteria) {
+  self.addExtraAutocompleteCriteria = function(req, criteria, options) {
     superAddExtraAutocompleteCriteria.call(self, req, criteria);
     self.setOptionsForDefaultView(options);
   };
