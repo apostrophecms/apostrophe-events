@@ -13,14 +13,19 @@
   {% endif %}
 {% endmacro %}
 
-{% macro renderEvent(item, pageUrl) %}
+{% macro renderEvent(item, pageUrl, options) %}
   <div class="apos-event">
     <div class="apos-event-heading">
-      <h4><a href="{{ pageUrl }}/{{ item.slug }}">{{ item.title | e }}</a></h4>
+      <h4>
+        <a href="{{ pageUrl }}/{{ item.slug }}">{{ item.title | e }}</a>      {% if options.edit and item._edit %}
+          <a class="apos-control apos-ui apos-button apos-edit-snippet-button" data-edit-{{ item.type | css }} data-slug="{{ item.slug }}" href="#"><i class="icon-pencil"></i> Edit</a>
+        {% endif %}
+      </h4>
       <div class="blog-title-divider"></div>
       <h6><date>{{ eventDateRange(item) }}</date></h6>
     </div>
-    <div class="apos-event-body">{{ aposArea(item, 'body') }}</div>
+    {{ aposSingleton(item, 'thumbnail', 'slideshow', { edit: false }) }}
+    <div class="apos-event-body">{{ aposArea(item, 'body', { edit: false }) }}</div>
     {% if item.tags %}
       <div class="apos-event-tags">
         {{ __('File under') }}:
