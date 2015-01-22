@@ -18,7 +18,7 @@
     {{ snippetDateFilter() }}
     {{ snippetSearchFilter() }}
   </div>
-  
+
 {% endblock %}
 
 {% block modalLabel %}
@@ -28,8 +28,8 @@
 {% block modalBody %}
   <table data-items class="apos-manage-table">
     <tr>
-      <th class="apos-manage-events-date">{{ __('Date') }}</th>
-      <th class="apos-manage-events-title">{{ __('Title') }}</th>
+      <th class="apos-manage-events-date" data-sort="startDate">{{ __('Date') }}</th>
+      <th class="apos-manage-events-title" data-sort="title">{{ __('Title') }}</th>
       <th class="apos-manage-events-author">{{ __('Author') }}</th>
       <th class="apos-manage-events-status">{{ __('Status') }}</th>
     </tr>

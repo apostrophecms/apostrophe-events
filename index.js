@@ -128,17 +128,24 @@ events.Events = function(options, callback) {
     if (query.date !== undefined) {
       if (query.date === 'past') {
         criteria.startDate = { $lte: moment().format('YYYY-MM-DD') };
-        options.sort = { startDate: -1, sortTitle: 1 };
+        if (!options.sort){
+          options.sort = { startDate: -1, sortTitle: 1 };
+        }
+
         return;
       } else if (query.date === 'future') {
         criteria.startDate = { $gte: moment().format('YYYY-MM-DD') };
-        options.sort = { startDate: 1, sortTitle: 1 };
+        if (!options.sort){
+          options.sort = { startDate: 1, sortTitle: 1 };
+        }
         return;
       } else {
         // Default behavior works for 'all'
       }
     }
-    options.sort = { startDate: -1, sortTitle: 1 };
+    if (!options.sort){
+      options.sort = { startDate: -1, sortTitle: 1 };
+    }
   };
 
   self.denormalizeDates = function(snippet) {
@@ -354,6 +361,7 @@ events.Events = function(options, callback) {
     // "Why copy the object like this?" If we don't, we're modifying the
     // object that was passed to us, which could lead to side effects
     extend(true, options, optionsArg || {});
+
     if (!options.sort) {
       // start is always a Date object, suitable for sorting
       options.sort = { start: 1, sortTitle: 1 };
