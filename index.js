@@ -384,10 +384,12 @@ events.Events = function(options, callback) {
     }
     if (options.today) {
       console.log();
-      filterCriteria.startDate = moment().format('YYYY-MM-DD');
+      filterCriteria.startDate = { $lte: moment().format('YYYY-MM-DD')};
+      filterCriteria.endDate = { $gte: moment().format('YYYY-MM-DD')};
     }
     if (options.tomorrow){
-      filterCriteria.startDate = moment().add('d', 1).format('YYYY-MM-DD');
+      filterCriteria.startDate = { $lte: moment().add('d', 1).format('YYYY-MM-DD')};
+      filterCriteria.endDate = { $gte: moment().add('d', 1).format('YYYY-MM-DD')};
     }
     return superGet.call(self, req, { $and: [ userCriteria, filterCriteria ] }, options, function(err, results) {
       if (err) {
