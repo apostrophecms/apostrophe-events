@@ -302,6 +302,12 @@ events.Events = function(options, callback) {
       // We don't paginate the events for this month when displaying them in the calendar, so be sure we don't get too much stuff
       options.fields = { _id: 1, title: 1, slug: 1, startDate: 1, startTime: 1, endDate: 1, endTime: 1, start: 1, end: 1, tags: 1 };
     }
+    if (req.query.today){
+      options.today = true;
+    }
+    if (req.query.tomorrow){
+      options.tomorrow = true;
+    }
     self.get(req, criteria, options, function(err, results) {
       if (err) {
         return callback(err);
@@ -375,6 +381,13 @@ events.Events = function(options, callback) {
     // all-day event taking place today.
     if (options.upcoming) {
       filterCriteria.endDate = { $gte: moment().format('YYYY-MM-DD') };
+    }
+    if (options.today) {
+      console.log();
+      filterCriteria.startDate = moment().format('YYYY-MM-DD');
+    }
+    if (options.tomorrow){
+      filterCriteria.startDate = moment().add('d', 1).format('YYYY-MM-DD');
     }
     return superGet.call(self, req, { $and: [ userCriteria, filterCriteria ] }, options, function(err, results) {
       if (err) {
