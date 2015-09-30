@@ -28,5 +28,21 @@ function AposEvents(optionsArg) {
     $snippet.find('[data-status]').text(status);
   };
 
+  self.afterPopulatingEditor = function($el, snippet, callback) {
+    var $start = aposSchemas.findField($el, 'startDate');
+    var $end = aposSchemas.findField($el, 'endDate');
+
+    $start.on('blur', function(){
+      var endVal = $end.val();
+      if(!endVal) {
+        window.setTimeout(function() {
+          $end.val($start.val());
+        }, 250)      
+      }
+    });
+
+    return callback();
+  };
+
 }
 
