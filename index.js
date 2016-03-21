@@ -87,11 +87,17 @@ module.exports = {
 
   construct: function(self, options) {
     var superFind = self.find;
-
     self.find = function(req, criteria, projection) {
       var cursor = superFind(req, criteria, projection);
       require('./lib/cursor')(self, cursor);
       return cursor;
+    };
+
+    // limit the results of autocomplete for joins
+    // so they only include 
+    self.extendAutocompleteCursor = function(cursor) {
+      require('./lib/cursor')(self, cursor);
+      return cursor.upcoming(true);
     };
 
     self.beforeSave = function(req, piece, callback) {

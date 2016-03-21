@@ -3,6 +3,9 @@
 
 {% block main %}
   {% for piece in data.pieces %}
-    <h4><a href="{{ piece._url }}">{{ piece.title }}</a></h4>
+    <div class="apos-event-preview">
+      <h4 class="apos-event-title"><a href="{{ piece._url }}">{{ piece.title }}</a></h4>
+      <h5 class="apos-event-date">{{ piece.start | date('MMMM Do') }} at {{ piece.start | date('h:mma') }}</h5>
+    </div>
   {% endfor %}
 {% endblock %}
