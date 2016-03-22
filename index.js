@@ -26,25 +26,25 @@ module.exports = {
       {
         name: 'allDay',
         label: 'Is this an all day event?',
-        type: 'select',
+        type: 'boolean',
         choices: [
-          { label: 'Yes', value: '1' },
-          { label: 'No', value: '0', showFields: ['startTime', 'endTime'] }
+          { label: 'Yes', value: true },
+          { label: 'No', value: false , showFields: ['startTime', 'endTime'] }
         ],
-        def: 0
-      },      
+        def: false
+      },
       {
         name: 'startTime',
         label: 'Start Time',
         type: 'time',
-        def: '9am',
+        def: '09:00:00',
         required: true
       },
       {
         name: 'endTime',
         label: 'End Time',
         type: 'time',
-        def: '5:30pm',
+        def: '17:30:00',
         required: true        
       },
       {
@@ -86,6 +86,13 @@ module.exports = {
       { name: 'meta', label: 'Meta', fields: ['tags','published'] }
     ], options.arrangeFields || []);
 
+    options.addColumns = [
+      {
+        name: 'startDate',
+        label: 'Start Date', 
+      }
+    ]
+
     options.addSorts = [
       {
         name: 'startDate',
@@ -118,6 +125,7 @@ module.exports = {
 
   construct: function(self, options) {
     var superFind = self.find;
+
     self.find = function(req, criteria, projection) {
       var cursor = superFind(req, criteria, projection);
       require('./lib/cursor')(self, cursor);
@@ -127,12 +135,11 @@ module.exports = {
     // limit the results of autocomplete for joins
     // so they only include 
     self.extendAutocompleteCursor = function(cursor) {
-      require('./lib/cursor')(self, cursor);
       return cursor.upcoming(true);
     };
 
     self.beforeSave = function(req, piece, callback) {
-      self.normalizeDatesAndTimes(piece);
+      self.denormalizeDatesAndTimes(piece);
       return callback(null);
     };
 
@@ -144,7 +151,7 @@ module.exports = {
       }
     };
 
-    self.normalizeDatesAndTimes = function(piece) {
+    self.denormalizeDatesAndTimes = function(piece) {
       // Parse our dates and times 
       var startTime = piece.startTime
         , startDate = piece.startDate
@@ -158,13 +165,17 @@ module.exports = {
         endDate = piece.startDate;
       }
 
-      if(piece.allDay === '1') {
+      if(piece.allDay) {
         startTime = '00:00:00';
         endTime = '23:59:59';
       }
 
-      piece.start = new Date(startDate +'T'+ startTime);
-      piece.end = new Date(endDate +'T'+ endTime);
+      if(piece.dateType == 'repeat') {
+        piece.hasClones = true;
+      }
+
+      piece.start = new Date(startDate +' '+ startTime);
+      piece.end = new Date(endDate +' '+ endTime);
     };
 
     self.repeatEvent = function(req, piece, finalCallback) {
@@ -177,7 +188,7 @@ module.exports = {
         addDates.push(moment(piece.startDate).add(i, multiplier).format('YYYY-MM-DD'));      
       }
 
-      return async.each(addDates, function(date, callback) {
+      return async.eachLimit(addDates, 5, function(date, callback) {
         var eventCopy = _.cloneDeep(piece);
         eventCopy._id = self.apos.utils.generateId();
         eventCopy.parentId = piece._id;
@@ -186,7 +197,7 @@ module.exports = {
         eventCopy.endDate = date;
         eventCopy.slug = eventCopy.slug + '-' + date;
         eventCopy.dateType = 'single';
-        self.normalizeDatesAndTimes(eventCopy);
+        self.denormalizeDatesAndTimes(eventCopy);
         return self.insert(req, eventCopy, callback);
       }, finalCallback);
     };
