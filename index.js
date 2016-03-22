@@ -86,10 +86,6 @@ module.exports = {
       { name: 'meta', label: 'Meta', fields: ['tags','published'] }
     ], options.arrangeFields || []);
 
-    options.addColumns = [ 
-      { name: 'startDate', label: 'Start Date' }
-    ].concat(options.addColumns || []);
-
     options.addSorts = [
       {
         name: 'startDate',
