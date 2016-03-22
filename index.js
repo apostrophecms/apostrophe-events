@@ -85,6 +85,39 @@ module.exports = {
       { name: 'advanced', label: 'Advanced', fields: ['dateType', 'endDate', 'repeatInterval', 'repeatCount'] },
       { name: 'meta', label: 'Meta', fields: ['tags','published'] }
     ], options.arrangeFields || []);
+
+    options.addColumns = [ 
+      { name: 'startDate', label: 'Start Date' }
+    ].concat(options.addColumns || []);
+
+    options.addSorts = [
+      {
+        name: 'startDate',
+        label: 'By Start Date',
+        sort: { startDate: -1 }
+      }
+    ].concat(options.addSorts || []);
+
+    options.addFilters = [
+      {
+        name: 'upcoming',
+        choices: [
+          {
+            value: true,
+            label: 'Upcoming'
+          },
+          {
+            value: false,
+            label: 'Past'
+          },
+          {
+            value: null,
+            label: 'Both'
+          }
+        ],
+        def: null
+      }
+    ].concat(options.addFilters || []);
   },
 
   construct: function(self, options) {
@@ -103,6 +136,19 @@ module.exports = {
     };
 
     self.beforeSave = function(req, piece, callback) {
+      self.sanitizeDatesAndTimes(piece);
+      return callback(null);
+    };
+
+    self.afterCreate = function(req, piece, callback) {
+      if(piece.dateType == 'repeat') {
+        return self.repeatEvent(req, piece, callback);
+      } else {
+        return callback(null);
+      }
+    };
+
+    self.sanitizeDatesAndTimes = function(piece) {
       // Parse our dates and times 
       var startTime = piece.startTime
         , startDate = piece.startDate
@@ -123,16 +169,6 @@ module.exports = {
 
       piece.start = new Date(startDate +'T'+ startTime);
       piece.end = new Date(endDate +'T'+ endTime);
-
-      return callback(null);
-    };
-
-    self.afterCreate = function(req, piece, callback) {
-      if(piece.dateType == 'repeat') {
-        return self.repeatEvent(req, piece, callback)
-      } else {
-        return callback(null);
-      }
     };
 
     self.repeatEvent = function(req, piece, finalCallback) {
@@ -145,7 +181,7 @@ module.exports = {
         addDates.push(moment(piece.startDate).add(i, multiplier).format('YYYY-MM-DD'));      
       }
 
-      return async.eachSeries(addDates, function(date, callback) {
+      return async.each(addDates, function(date, callback) {
         var eventCopy = _.cloneDeep(piece);
         eventCopy._id = self.apos.utils.generateId();
         eventCopy.parentId = piece._id;
@@ -154,6 +190,7 @@ module.exports = {
         eventCopy.endDate = date;
         eventCopy.slug = eventCopy.slug + '-' + date;
         eventCopy.dateType = 'single';
+        self.sanitizeDatesAndTimes(eventCopy);
         return self.insert(req, eventCopy, callback);
       }, finalCallback);
     };
