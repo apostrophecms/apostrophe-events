@@ -132,7 +132,7 @@ module.exports = {
     };
 
     self.beforeSave = function(req, piece, callback) {
-      self.sanitizeDatesAndTimes(piece);
+      self.normalizeDatesAndTimes(piece);
       return callback(null);
     };
 
@@ -144,7 +144,7 @@ module.exports = {
       }
     };
 
-    self.sanitizeDatesAndTimes = function(piece) {
+    self.normalizeDatesAndTimes = function(piece) {
       // Parse our dates and times 
       var startTime = piece.startTime
         , startDate = piece.startDate
@@ -186,7 +186,7 @@ module.exports = {
         eventCopy.endDate = date;
         eventCopy.slug = eventCopy.slug + '-' + date;
         eventCopy.dateType = 'single';
-        self.sanitizeDatesAndTimes(eventCopy);
+        self.normalizeDatesAndTimes(eventCopy);
         return self.insert(req, eventCopy, callback);
       }, finalCallback);
     };
