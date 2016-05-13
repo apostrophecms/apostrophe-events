@@ -14,7 +14,7 @@ module.exports = {
   },
 
   beforeConstruct: function(self, options) {
-    options.sort = { startDate: 1 };
+    options.sort = { startDate: 1, startTime: 1 };
 
     options.addFields = [
       {
