@@ -7,7 +7,7 @@ module.exports = {
   alias: 'events',
   label: 'Event',
   extend: 'apostrophe-pieces',
-  
+
   moogBundle: {
     modules: ['apostrophe-events-pages', 'apostrophe-events-widgets'],
     directory: 'lib/modules'
@@ -45,7 +45,7 @@ module.exports = {
         label: 'End Time',
         type: 'time',
         def: '17:30:00',
-        required: true        
+        required: true
       },
       {
         name: 'dateType',
@@ -80,16 +80,16 @@ module.exports = {
       }
     ].concat(options.addFields || []);
 
-    options.arrangeFields = _.merge([
+    options.arrangeFields = options.arrangeFields || [
       { name: 'basic', label: 'Basics', fields: ['title', 'slug', 'startDate', 'allDay', 'startTime', 'endTime'] },
       { name: 'advanced', label: 'Advanced', fields: ['dateType', 'endDate', 'repeatInterval', 'repeatCount'] },
       { name: 'meta', label: 'Meta', fields: ['tags','published'] }
-    ], options.arrangeFields || []);
+    ];
 
     options.addColumns = [
       {
         name: 'startDate',
-        label: 'Start Date', 
+        label: 'Start Date',
       }
     ]
 
@@ -133,7 +133,7 @@ module.exports = {
     };
 
     // limit the results of autocomplete for joins
-    // so they only include 
+    // so they only include
     self.extendAutocompleteCursor = function(cursor) {
       return cursor.upcoming(true);
     };
@@ -152,7 +152,7 @@ module.exports = {
     };
 
     self.denormalizeDatesAndTimes = function(piece) {
-      // Parse our dates and times 
+      // Parse our dates and times
       var startTime = piece.startTime
         , startDate = piece.startDate
         , endTime = piece.endTime
@@ -185,7 +185,7 @@ module.exports = {
         , addDates = [];
 
       for(i = 1; i < repeat; i++) {
-        addDates.push(moment(piece.startDate).add(i, multiplier).format('YYYY-MM-DD'));      
+        addDates.push(moment(piece.startDate).add(i, multiplier).format('YYYY-MM-DD'));
       }
 
       return async.eachLimit(addDates, 5, function(date, callback) {
