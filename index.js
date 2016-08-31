@@ -124,7 +124,6 @@ module.exports = {
   },
 
   construct: function(self, options) {
-    self.apos.define('apostrophe-events-cursor', require('./lib/cursor.js'));
 
     // limit the results of autocomplete for joins
     // so they only include upcoming events
