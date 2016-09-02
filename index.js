@@ -131,12 +131,12 @@ module.exports = {
       return cursor.upcoming(true);
     };
 
-    self.beforeSave = function(req, piece, callback) {
+    self.beforeSave = function(req, piece, options, callback) {
       self.denormalizeDatesAndTimes(piece);
       return callback(null);
     };
 
-    self.afterCreate = function(req, piece, callback) {
+    self.afterInsert = function(req, piece, options, callback) {
       if(piece.dateType == 'repeat') {
         return self.repeatEvent(req, piece, callback);
       } else {
