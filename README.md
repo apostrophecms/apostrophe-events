@@ -56,3 +56,30 @@ Another approach is to `extend` the modules, creating new modules and a complete
 
 The latter approach is often best as it requires less user training to avoid confusion. The former approach has its own advantages, notably that it is easier to aggregate content and have it appear in multiple places intentionally.
 
+## Filtering by year, month and day
+
+The `apostrophe-events` module provides cursor filters named `year`, `month`, and `day`. For `year` the value should be a 4-digit year. For `month` the value should be in `YYYY-MM` format. For `day` the value should be in `YYYY-MM-DD` format.
+
+All events which are in progress at any point during the specified year, month or day will be included in the results.
+
+These filters are marked `safeFor: public` and can be used with the `piecesFilters` option in `apostrophe-events-pages`.
+
+For example:
+
+```javascript
+// in lib/modules/apostrophe-events-pages/index.js
+  piecesFilters: [
+    {
+      name: 'year'
+    }
+  ]
+```
+
+```markup
+<!-- In lib/modules/apostrophe-events-pages/views/index.html -->
+<li><a class="{{ 'active' if not data.query.year }}" href="{{ here({ year: null }) }}">Upcoming</a></li>
+{% for year in data.piecesFilters.year %}
+  <li><a class="{{ 'active' if data.query.year == year.value }}" href="{{ here({ year: year.value }) }}">{{ year.label }}</a></li>
+{% endfor %}
+```
+
