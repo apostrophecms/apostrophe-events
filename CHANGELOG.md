@@ -1,3 +1,7 @@
+### 2.1.0
+
+Added `start` and `and` cursor filters.
+
 ### 2.0.2
 
 Added `year`, `month` and `day` cursor filters, which are suitable for use with the `piecesFilters` option.
