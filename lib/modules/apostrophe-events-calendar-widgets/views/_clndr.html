@@ -1,0 +1,28 @@
+<% %>
+<div class="c-cal-controls">
+  <button class="fa fa-prev clndr-button clndr-previous-button c-cal-controls-prev"></button>
+  <a class="c-cal-month" href="?month=<%= days[10].date.format('YYYY-MM') %>"><%= month %></a>
+  <button class="fa fa-next clndr-button clndr-next-button c-cal-controls-next"></button>
+</div>
+<div class="clndr-grid">
+  <div class="days-of-the-week">
+    <div class="c-cal-grid">
+      <% _.each(daysOfTheWeek, function (day) { %>
+        <div class="c-cal-week"><%= day %></div>
+      <% }); %>
+    </div>
+      <div class="c-cal-grid">
+      <% _.each(days, function (day) { %>
+        <div class="c-cal-day <%= day.classes %> <%= extras.queryDate == day.date.format('YYYY-MM-DD') ? 'is-active' : '' %>">
+          <% if (day.events.length > 0) { %>
+              <a href="{{ data.page._url }}?day=<%= day.date.format('YYYY-MM-DD') %>">
+                <%= day.day %>
+              </a>
+            <% } else { %>
+              <%= day.day %>
+            <% } %>
+        </div>
+      <% }); %>
+      </div>
+  </div>
+</div>

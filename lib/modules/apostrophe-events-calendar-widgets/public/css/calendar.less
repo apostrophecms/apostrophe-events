@@ -1,0 +1,117 @@
+@white: white;
+@black: #000F3A;
+@blue-darkest: #000F3A;
+@blue-dark: #00144D;
+@blue-medium: #01256E;
+@blue-light: #045EA7;
+@blue-lightest: #82AFD3;
+@blue-transparent: rgba(130, 175, 211, 0.15);
+
+@red-dark: #57000A;
+@red: #95001A;
+
+@gray: #EFEFEF;
+@gray-fade: #2c2f39;
+
+.c-calendar {
+  background-color: @blue-transparent;
+  padding: 1rem;
+  margin-bottom: 2rem;
+}
+
+.c-cal-month {
+  display: block;
+  text-align: center;
+}
+
+.c-cal-grid {
+  font-size: 0.8666rem;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+
+  > div {
+    align-self: center;
+    width: 13%;
+    padding: 11px 0;
+
+    > a {
+      text-decoration: none;
+    }
+  }
+}
+
+.c-cal-controls {
+  position: relative;
+  margin: 0 4rem 2rem;
+}
+
+.c-cal-controls-title {
+  display: block;
+  text-align: center;
+}
+
+.c-cal-controls-prev,
+.c-cal-controls-next {
+  border: 0;
+  background-color: transparent;
+  border-radius: 0;
+  top: 1px;
+  font-size: 1.2rem;
+  position: absolute;
+  padding: 0;
+}
+
+.clndr-grid {
+  margin: 0 2rem;
+}
+
+.c-cal-controls-prev { left: 0; }
+.c-cal-controls-next { right: 0; }
+
+.c-cal-week { color: @blue-darkest; font-weight: 500; }
+
+.c-cal-day {
+  color: @blue-light;
+  
+    > a {
+      // color: @purple;
+    }
+
+    &.adjacent-month { color: @blue-lightest; }
+    &.today,
+    &.is-active {
+      position: relative;
+      // background-color: @cream;
+      &:after {
+        z-index: -1;
+        content: "";
+        position: absolute;
+        top: 4px;
+        height: 30px;
+        width: 30px;
+        border-radius: 50%;
+        background-color: rgba(130, 175, 211, 0.5);
+        left: 0;
+        right: 0;
+        margin-right: auto;
+        margin-left: auto;
+      }
+    }
+    &.event {
+     a {
+        // color: @blue-darkest;
+        font-weight: 700;
+        border-bottom: 1px solid @blue-light;
+      }
+    }
+
+    &.is-active {
+      &:after { background-color: @blue-darkest; top: 6px;  }
+      & > a { color: @white; border-bottom-color: @white; }
+    }
+
+
+}

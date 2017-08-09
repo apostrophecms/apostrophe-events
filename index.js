@@ -9,7 +9,7 @@ module.exports = {
   extend: 'apostrophe-pieces',
 
   moogBundle: {
-    modules: ['apostrophe-events-pages', 'apostrophe-events-widgets'],
+    modules: ['apostrophe-events-pages', 'apostrophe-events-widgets', 'apostrophe-events-calendar-widgets'],
     directory: 'lib/modules'
   },
 
@@ -195,4 +195,7 @@ module.exports = {
       }, finalCallback);
     };
   },
+  afterConstruct: function(self) {
+    self.pushAsset('script', 'filters', { when: 'always' });
+  }
 };
