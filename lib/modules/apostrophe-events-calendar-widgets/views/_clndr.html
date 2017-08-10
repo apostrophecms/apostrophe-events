@@ -15,7 +15,7 @@
       <% _.each(days, function (day) { %>
         <div class="c-cal-day <%= day.classes %> <%= extras.queryDate == day.date.format('YYYY-MM-DD') ? 'is-active' : '' %>">
           <% if (day.events.length > 0) { %>
-              <a href="{{ data.page._url }}?day=<%= day.date.format('YYYY-MM-DD') %>">
+              <a href="?day=<%= day.date.format('YYYY-MM-DD') %>">
                 <%= day.day %>
               </a>
             <% } else { %>
@@ -26,3 +26,17 @@
       </div>
   </div>
 </div>
+<ul class="c-cal-listing">
+  <% _.each(days, function (day) { %>
+      <% if (day.events.length > 0) { %>
+        <% _.each(day.events, function (event) { %>
+          <li class="c-cal-listing-event <%= day.classes %> <%= extras.queryDate == day.date.format('YYYY-MM-DD') ? 'is-active' : '' %>">
+            <a class="c-cal-listing-link" href="<%= event.url %>">
+              <h6 class="c-cal-listing-date" ><%= day.date.format('MMMM DD, YYYY') %></h6>
+              <h5 class="c-cal-listing-title"><%= event.title %></h5>
+            </a>
+          </li>
+        <% }); %>
+      <% } %>
+  <% }); %>
+</ul>
