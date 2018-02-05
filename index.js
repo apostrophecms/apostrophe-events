@@ -91,7 +91,7 @@ module.exports = {
         name: 'startDate',
         label: 'Start Date',
       }
-    ]
+    ].concat(options.addColumns || []);
 
     options.addSorts = [
       {
