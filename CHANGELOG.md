@@ -1,3 +1,11 @@
+### 2.1.2
+
+Repeating events were incompatible with `apostrophe-workflow`. This issue has been fixed.
+
+### 2.1.1
+
+Use of `addFields` by modules extending `apostrophe-events` now works as expected.
+
 ### 2.1.0
 
 Added `start` and `and` cursor filters.
