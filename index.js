@@ -137,7 +137,7 @@ module.exports = {
     };
 
     self.afterInsert = function(req, piece, options, callback) {
-      if (_.has(options, 'workflowMissingLocalesLive')) {
+      if (piece._workflowPropagating) {
         // Workflow is replicating this but also its existing
         // scheduled repetitions, don't re-replicate them and cause problems
         return callback(null);
