@@ -1,3 +1,7 @@
+### 2.1.3
+
+`upcoming` now takes end time into account.
+
 ### 2.1.2
 
 Repeating events were incompatible with `apostrophe-workflow`. This issue has been fixed.
