@@ -1,4 +1,4 @@
-var _ = require('lodash')
+var _ = require('@sailshq/lodash')
   , async = require('async')
   , moment = require('moment');
 
