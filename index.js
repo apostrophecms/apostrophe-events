@@ -118,7 +118,7 @@ module.exports = {
             label: 'Both'
           }
         ],
-        def: null
+        def: true
       }
     ].concat(options.addFilters || []);
   },

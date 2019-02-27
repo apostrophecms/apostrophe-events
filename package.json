@@ -1,6 +1,6 @@
 {
   "name": "apostrophe-events",
-  "version": "2.1.3",
+  "version": "2.1.4",
   "description": "Calendar of events for the Apostrophe content management system",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:punkave/apostrophe-events.git"
+    "url": "git@github.com:apostrophecms/apostrophe-events.git"
   },
   "keywords": [
     "calendar",
@@ -16,7 +16,7 @@
     "event",
     "apostrophe",
     "cms",
-    "punkave"
+    "apostrophecms"
   ],
   "author": "P'unk Avenue LLC",
   "license": "MIT",
