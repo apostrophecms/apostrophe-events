@@ -1,6 +1,6 @@
 # apostrophe-events
 
-This bundle provides a complete foundation for displaying upcoming events with the [Apostrophe CMS](http://apostrophenow.org).
+This bundle provides a complete foundation for displaying upcoming events with the [Apostrophe CMS](https://apostrophecms.org).
 
 The bundle consists of three Apostrophe modules (in a single npm module):
 
@@ -83,3 +83,6 @@ For example:
 {% endfor %}
 ```
 
+## Recurrence incrementing
+
+Set the `increment` option in the `apostrophe-events` module (or your module that's extending it) to `true` to enable recurring event period incrementing. This would allow someone to create events that repeat every other week or every third month, for example.

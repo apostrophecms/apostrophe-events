@@ -1,3 +1,7 @@
+### 2.2.0
+
+Adds the `increment` option for event recurrence other than every week or month.
+
 ### 2.1.3
 
 `upcoming` now takes end time into account.
