@@ -16,6 +16,18 @@ module.exports = {
   beforeConstruct: function(self, options) {
     options.sort = { startDate: 1, startTime: 1 };
 
+    var intervals = [
+      { label: 'Week', value: 'weeks' },
+      { label: 'Month', value: 'months' }
+    ];
+
+    if (options.biweekly) {
+      intervals.splice(1, 0, {
+        label: 'Biweekly',
+        value: 'twoWeeks'
+      })
+    }
+
     options.addFields = [
       {
         name: 'startDate',
@@ -67,10 +79,7 @@ module.exports = {
         name: 'repeatInterval',
         label: 'Repeats every',
         type: 'select',
-        choices: [
-          { label: 'Week', value: 'weeks' },
-          { label: 'Month', value: 'months' }
-        ]
+        choices: intervals
       },
       {
         name: 'repeatCount',
@@ -177,13 +186,22 @@ module.exports = {
     };
 
     self.repeatEvent = function(req, piece, finalCallback) {
-      var i
-        , repeat = parseInt(piece.repeatCount) + 1
-        , multiplier = piece.repeatInterval
-        , addDates = [];
+      var i;
+      var repeat = parseInt(piece.repeatCount) + 1;
+      var multiplier;
+      var addDates = [];
+
+      if (piece.repeatInterval === 'twoWeeks') {
+        multiplier = 'weeks';
+      } else {
+        multiplier = piece.repeatInterval;
+      }
 
       for(i = 1; i < repeat; i++) {
-        addDates.push(moment(piece.startDate).add(i, multiplier).format('YYYY-MM-DD'));
+        var n = i;
+        if (options.biweekly) { n = i * 2; }
+
+        addDates.push(moment(piece.startDate).add(n, multiplier).format('YYYY-MM-DD'));
       }
 
       return async.eachLimit(addDates, 5, function(date, callback) {
