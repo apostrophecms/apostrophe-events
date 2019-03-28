@@ -16,19 +16,11 @@ module.exports = {
   beforeConstruct: function(self, options) {
     options.sort = { startDate: 1, startTime: 1 };
 
-    var intervals = [
-      { label: 'Week', value: 'weeks' },
-      { label: 'Month', value: 'months' }
-    ];
+    var recurringFields = ['repeatInterval', 'repeatCount'];
 
-    if (options.biweekly) {
-      intervals.splice(1, 0, {
-        label: 'Biweekly',
-        value: 'twoWeeks'
-      })
-    }
+    if (options.increment) { recurringFields.push('repeatIncrement'); };
 
-    options.addFields = [
+    var eventSchema = [
       {
         name: 'startDate',
         label: 'Date',
@@ -66,7 +58,7 @@ module.exports = {
         choices: [
           { label: 'Single Day', value: 'single' },
           { label: 'Consecutive Days', value: 'consecutive', showFields: ['endDate'] },
-          { label: 'Recurring', value: 'repeat', showFields: ['repeatInterval', 'repeatCount'] },
+          { label: 'Recurring', value: 'repeat', showFields: recurringFields },
         ],
         def: 'single'
       },
@@ -79,7 +71,10 @@ module.exports = {
         name: 'repeatInterval',
         label: 'Repeats every',
         type: 'select',
-        choices: intervals
+        choices: [
+          { label: 'Week', value: 'weeks' },
+          { label: 'Month', value: 'months' }
+        ]
       },
       {
         name: 'repeatCount',
@@ -87,11 +82,34 @@ module.exports = {
         type: 'integer',
         def: 1
       }
-    ].concat(options.addFields || []);
+    ];
+
+    if (options.increment) {
+      eventSchema.push(
+        {
+          name: 'repeatIncrement',
+          label: 'Repetition increment',
+          help: 'For example, enter "2" for every other week/month, or "1" for every week/month.',
+          def: 1,
+          type: 'integer'
+        }
+      );
+    }
+
+    options.addFields = eventSchema.concat(options.addFields || []);
+
+    var advancedFields = [
+      'dateType',
+      'endDate',
+      'repeatInterval',
+      'repeatCount'
+    ];
+
+    if (options.increment) { advancedFields.push('repeatIncrement'); }
 
     options.arrangeFields = options.arrangeFields || [
       { name: 'basic', label: 'Basics', fields: ['title', 'slug', 'startDate', 'allDay', 'startTime', 'endTime'] },
-      { name: 'advanced', label: 'Advanced', fields: ['dateType', 'endDate', 'repeatInterval', 'repeatCount'] },
+      { name: 'advanced', label: 'Advanced', fields: advancedFields },
       { name: 'meta', label: 'Meta', fields: ['tags','published'] }
     ];
 
@@ -188,18 +206,12 @@ module.exports = {
     self.repeatEvent = function(req, piece, finalCallback) {
       var i;
       var repeat = parseInt(piece.repeatCount) + 1;
-      var multiplier;
+      var multiplier = piece.repeatInterval;
       var addDates = [];
-
-      if (piece.repeatInterval === 'twoWeeks') {
-        multiplier = 'weeks';
-      } else {
-        multiplier = piece.repeatInterval;
-      }
 
       for(i = 1; i < repeat; i++) {
         var n = i;
-        if (options.biweekly) { n = i * 2; }
+        if (options.increment) { n = i * piece.repeatIncrement; }
 
         addDates.push(moment(piece.startDate).add(n, multiplier).format('YYYY-MM-DD'));
       }
