@@ -194,8 +194,8 @@ module.exports = {
         return self.insert(req, eventCopy, callback);
       }, finalCallback);
     };
-  },
-  afterConstruct: function(self) {
-    self.pushAsset('script', 'filters', { when: 'always' });
   }
+  // afterConstruct: function(self) {
+  //   self.pushAsset('script', 'filters', { when: 'always' });
+  // }
 };

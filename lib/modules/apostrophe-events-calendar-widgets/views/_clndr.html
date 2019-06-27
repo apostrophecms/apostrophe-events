@@ -31,8 +31,8 @@
       <% if (day.events.length > 0) { %>
         <% _.each(day.events, function (event) { %>
           <li class="c-cal-listing-event <%= day.classes %> <%= extras.queryDate == day.date.format('YYYY-MM-DD') ? 'is-active' : '' %>">
-            <a class="c-cal-listing-link" href="<%= event.url %>">
-              <h6 class="c-cal-listing-date" ><%= day.date.format('MMMM DD, YYYY') %></h6>
+            <a class="c-cal-listing-link" href="<%= event._url %>">
+              <h6 class="c-cal-listing-date" ><%= moment(event.startDate).format('MMMM DD, YYYY') %></h6>
               <h5 class="c-cal-listing-title"><%= event.title %></h5>
             </a>
           </li>
