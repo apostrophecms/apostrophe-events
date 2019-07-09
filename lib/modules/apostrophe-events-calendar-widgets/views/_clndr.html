@@ -15,7 +15,7 @@
       <% _.each(days, function (day) { %>
         <div class="c-cal-day <%= day.classes %> <%= extras.queryDate == day.date.format('YYYY-MM-DD') ? 'is-active' : '' %>">
           <% if (day.events.length > 0) { %>
-              <a href="?day=<%= day.date.format('YYYY-MM-DD') %>">
+              <a class="c-cal-link" href="?day=<%= day.date.format('YYYY-MM-DD') %>">
                 <%= day.day %>
               </a>
             <% } else { %>

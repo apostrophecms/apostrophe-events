@@ -26,21 +26,28 @@
 }
 
 .c-cal-grid {
+  display: -ms-flexbox;
   display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
+  -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+  -ms-flex-pack: center;
+      justify-content: center;
+  -ms-flex-align: center;
+      align-items: center;
   text-align: center;
 
-  > div {
-    align-self: center;
+  .c-cal-week,
+  .c-cal-day {
+    -ms-flex-item-align: center;
+        -ms-grid-row-align: center;
+        align-self: center;
     width: 13%;
     padding: 11px 0;
-
-    > a {
-      text-decoration: none;
-    }
   }
+}
+
+.c-cal-link {
+  text-decoration: none;
 }
 
 .c-cal-controls {
@@ -71,16 +78,11 @@
 
 .c-cal-day {
   color: @blue-light;
-  
-    > a {
-      // color: @purple;
-    }
 
     &.adjacent-month { color: @blue-lightest; }
     &.today,
     &.is-active {
       position: relative;
-      // background-color: @cream;
       &:after {
         z-index: -1;
         content: "";
@@ -98,7 +100,6 @@
     }
     &.event {
      a {
-        // color: @blue-darkest;
         font-weight: 700;
         border-bottom: 1px solid @blue-light;
       }

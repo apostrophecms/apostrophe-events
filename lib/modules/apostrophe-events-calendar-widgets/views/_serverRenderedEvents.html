@@ -1,0 +1,14 @@
+{% macro render(events) %}
+  {% for event in events  %}
+  <section> 
+    <h3>Event title: {{ event.title }}</h3>
+    <span>Start Date: {{ event.startDate | date('DD-MM-YYYY') }}</span>
+    <span>Start Time: {{ event.startTime }}</span>
+    <span>End Date: {{ event.endDate | date('DD-MM-YYYY') }}</span>
+    <span>End Time: {{ event.endTime }}</span>
+    {% if event._url %}
+      <a href="{{ event._url }}">More information about {{ event.title }}</a>
+    {% endif %}
+  </section>
+{% endfor %}
+{% endmacro %}

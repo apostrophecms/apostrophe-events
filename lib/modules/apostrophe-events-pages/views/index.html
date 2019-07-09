@@ -1,69 +1,11 @@
 {% extends data.outerLayout %}
-{%- import 'apostrophe-pager:macros.html' as pager with context -%}
-{%- import 'apostrophe-events:macros.html' as eventMacros with context -%}
-
 {% block title %}{{ data.page.title }}{% endblock %}
 
 {% block main %}
-    <div class="apos-event-wrapper">
-	    <div class="apos-event-sidebar">
-	    	{{ apos.singleton(data.page, 'calendar', 'apostrophe-events-calendar', {}) }}
-	    </div>
-	    <div class="apos-event-main">
-	    	<h1>{{ data.page.title }}</h1>
-	    	<div class="apos-event-filters-wrapper">
-	    		{{ eventMacros.renderFilters(data.query, data.piecesFilters) }}
-	    	</div>
-			  {% for piece in data.pieces %}
-			    <div class="apos-event-preview">
-			    	<h5 class="apos-event-date">{{ piece.start | date('MMMM Do') }} at {{ piece.start | date('h:mma') }}</h5>
-			      <h4 class="apos-event-title"><a href="{{ piece._url }}">{{ piece.title }}</a></h4>
-			    </div>
-			  {% endfor %}
-			  <div class="apos-event-pagination">
-			  	{{ pager.render({ page: data.currentPage, total: data.totalPages }, data.url) }}
-			  </div>
-	    </div>
+  {% for piece in data.pieces %}
+    <div class="apos-event-preview">
+      <h4 class="apos-event-title"><a href="{{ piece._url }}">{{ piece.title }}</a></h4>
+      <p class="apos-event-date">{{ piece.start | date('MMMM Do') }} at {{ piece.start | date('h:mma') }}</p>
     </div>
-    
-{% endblock %}
-
-{% block extraHead %}
-<style>
-	h1 {
-		font-size: 4rem;
-		margin-bottom: 20px;
-	}
-	h4 {
-		font-size: 1.5rem;
-		margin-bottom: 10px;
-	}
-	.apos-event-wrapper {
-		max-width: 800px;
-		margin: 30px auto;
-	}
-	.apos-event-preview {
-		padding: 20px;
-		margin-bottom: 30px;
-		background-color: #ddd;
-	}
-	.apos-event-sidebar {
-		width: 40%;
-		margin-right: 5%;
-	}
-	.apos-event-main {
-		width: 55%;
-	}
-	.apos-event-main, 
-	.apos-event-sidebar {
-		float: left;
-	}
-
-	/* event filters */
-	.apos-event-filters { display: block; margin-bottom: 10px;  }
-	.apos-event-filter {
-		float: left;
-		margin-right: 20px;
-	}
-</style>
+  {% endfor %}
 {% endblock %}

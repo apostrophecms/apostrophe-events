@@ -1,3 +1,10 @@
+{% import "_serverRenderedEvents.html" as server with context %}
 <div class="c-calendar" data-calendar>
   {# calendar gets dropped in here #}
+
+  {# 
+  this partial can be overridden but provides a place to 'display' events to crawlers. 
+  It gets zipped out when the browser renders a calendar 
+  #}
+  {{ server.render(data.widget._events) }}
 </div>

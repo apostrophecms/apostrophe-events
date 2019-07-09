@@ -4,7 +4,8 @@
   "description": "Calendar of events for the Apostrophe content management system",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "npm run lint",
+    "lint": "eslint ."
   },
   "repository": {
     "type": "git",
@@ -25,5 +26,14 @@
     "lodash": "^3.10.1",
     "moment": "^2.12.0",
     "qs": "^6.1.0"
+  },
+  "devDependencies": {
+    "eslint": "^5.0.0",
+    "eslint-config-apostrophe": "^2.0.2",
+    "eslint-config-standard": "^11.0.0",
+    "eslint-plugin-import": "^2.17.2",
+    "eslint-plugin-node": "^6.0.1",
+    "eslint-plugin-promise": "^3.8.0",
+    "eslint-plugin-standard": "^3.1.0"
   }
 }
