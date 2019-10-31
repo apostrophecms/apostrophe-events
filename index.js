@@ -1,6 +1,6 @@
-var _ = require('@sailshq/lodash')
-  , async = require('async')
-  , moment = require('moment');
+var _ = require('@sailshq/lodash');
+var async = require('async');
+var moment = require('moment');
 
 module.exports = {
   name: 'apostrophe-event',
@@ -29,7 +29,7 @@ module.exports = {
         type: 'boolean',
         choices: [
           { label: 'Yes', value: true },
-          { label: 'No', value: false , showFields: ['startTime', 'endTime'] }
+          { label: 'No', value: false, showFields: ['startTime', 'endTime'] }
         ],
         def: false
       },
@@ -54,7 +54,7 @@ module.exports = {
         choices: [
           { label: 'Single Day', value: 'single' },
           { label: 'Consecutive Days', value: 'consecutive', showFields: ['endDate'] },
-          { label: 'Recurring', value: 'repeat', showFields: ['repeatInterval', 'repeatCount'] },
+          { label: 'Recurring', value: 'repeat', showFields: ['repeatInterval', 'repeatCount'] }
         ],
         def: 'single'
       },
@@ -83,13 +83,13 @@ module.exports = {
     options.arrangeFields = options.arrangeFields || [
       { name: 'basic', label: 'Basics', fields: ['title', 'slug', 'startDate', 'allDay', 'startTime', 'endTime'] },
       { name: 'advanced', label: 'Advanced', fields: ['dateType', 'endDate', 'repeatInterval', 'repeatCount'] },
-      { name: 'meta', label: 'Meta', fields: ['tags','published'] }
+      { name: 'meta', label: 'Meta', fields: ['tags', 'published'] }
     ];
 
     options.addColumns = [
       {
         name: 'startDate',
-        label: 'Start Date',
+        label: 'Start Date'
       }
     ].concat(options.addColumns || []);
 
@@ -142,7 +142,7 @@ module.exports = {
         // scheduled repetitions, don't re-replicate them and cause problems
         return callback(null);
       }
-      if(piece.dateType == 'repeat') {
+      if (piece.dateType === 'repeat') {
         return self.repeatEvent(req, piece, callback);
       } else {
         return callback(null);
@@ -151,38 +151,38 @@ module.exports = {
 
     self.denormalizeDatesAndTimes = function(piece) {
       // Parse our dates and times
-      var startTime = piece.startTime
-        , startDate = piece.startDate
-        , endTime = piece.endTime
-        , endDate;
+      var startTime = piece.startTime;
+      var startDate = piece.startDate;
+      var endTime = piece.endTime;
+      var endDate;
 
-      if(piece.dateType == 'consecutive') {
+      if (piece.dateType === 'consecutive') {
         endDate = piece.endDate;
       } else {
         piece.endDate = piece.startDate;
         endDate = piece.startDate;
       }
 
-      if(piece.allDay) {
+      if (piece.allDay) {
         startTime = '00:00:00';
         endTime = '23:59:59';
       }
 
-      if(piece.dateType == 'repeat') {
+      if (piece.dateType === 'repeat') {
         piece.hasClones = true;
       }
 
-      piece.start = new Date(startDate +' '+ startTime);
-      piece.end = new Date(endDate +' '+ endTime);
+      piece.start = new Date(startDate + ' ' + startTime);
+      piece.end = new Date(endDate + ' ' + endTime);
     };
 
     self.repeatEvent = function(req, piece, finalCallback) {
-      var i
-        , repeat = parseInt(piece.repeatCount) + 1
-        , multiplier = piece.repeatInterval
-        , addDates = [];
+      var i;
+      var repeat = parseInt(piece.repeatCount) + 1;
+      var multiplier = piece.repeatInterval;
+      var addDates = [];
 
-      for(i = 1; i < repeat; i++) {
+      for (i = 1; i < repeat; i++) {
         addDates.push(moment(piece.startDate).add(i, multiplier).format('YYYY-MM-DD'));
       }
 
@@ -199,5 +199,5 @@ module.exports = {
         return self.insert(req, eventCopy, callback);
       }, finalCallback);
     };
-  },
+  }
 };
