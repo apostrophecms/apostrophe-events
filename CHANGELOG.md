@@ -1,3 +1,7 @@
+### 2.1.5
+
+The `month` pieces filter now includes all months that events span, not only the months in which they begin.
+
 ### 2.1.3
 
 `upcoming` now takes end time into account.
