@@ -1,3 +1,5 @@
+[![CircleCI](https://circleci.com/gh/apostrophecms/apostrophe-events/tree/master.svg?style=svg)](https://circleci.com/gh/apostrophecms/apostrophe-events/tree/master)
+
 # apostrophe-events
 
 This bundle provides a complete foundation for displaying upcoming events with the [Apostrophe CMS](http://apostrophenow.org).
