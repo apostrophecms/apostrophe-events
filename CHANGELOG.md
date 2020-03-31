@@ -1,3 +1,7 @@
+### 2.1.6 2020-03-31
+
+Updates the linter, removes an unused dependency, and sets up CircleCI.
+
 ### 2.1.5
 
 The `month` pieces filter now includes all months that events span, not only the months in which they begin.
