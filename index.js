@@ -14,7 +14,10 @@ module.exports = {
   },
 
   beforeConstruct: function(self, options) {
-    options.sort = { startDate: 1, startTime: 1 };
+    options.sort = {
+      startDate: 1,
+      startTime: 1
+    };
 
     options.addFields = [
       {
@@ -28,8 +31,15 @@ module.exports = {
         label: 'Is this an all day event?',
         type: 'boolean',
         choices: [
-          { label: 'Yes', value: true },
-          { label: 'No', value: false, showFields: ['startTime', 'endTime'] }
+          {
+            label: 'Yes',
+            value: true
+          },
+          {
+            label: 'No',
+            value: false,
+            showFields: ['startTime', 'endTime']
+          }
         ],
         def: false
       },
@@ -52,9 +62,20 @@ module.exports = {
         label: 'What type of event is this?',
         type: 'select',
         choices: [
-          { label: 'Single Day', value: 'single' },
-          { label: 'Consecutive Days', value: 'consecutive', showFields: ['endDate'] },
-          { label: 'Recurring', value: 'repeat', showFields: ['repeatInterval', 'repeatCount'] }
+          {
+            label: 'Single Day',
+            value: 'single'
+          },
+          {
+            label: 'Consecutive Days',
+            value: 'consecutive',
+            showFields: ['endDate']
+          },
+          {
+            label: 'Recurring',
+            value: 'repeat',
+            showFields: ['repeatInterval', 'repeatCount']
+          }
         ],
         def: 'single'
       },
@@ -68,8 +89,14 @@ module.exports = {
         label: 'Repeats every',
         type: 'select',
         choices: [
-          { label: 'Week', value: 'weeks' },
-          { label: 'Month', value: 'months' }
+          {
+            label: 'Week',
+            value: 'weeks'
+          },
+          {
+            label: 'Month',
+            value: 'months'
+          }
         ]
       },
       {
@@ -81,9 +108,21 @@ module.exports = {
     ].concat(options.addFields || []);
 
     options.arrangeFields = options.arrangeFields || [
-      { name: 'basic', label: 'Basics', fields: ['title', 'slug', 'startDate', 'allDay', 'startTime', 'endTime'] },
-      { name: 'advanced', label: 'Advanced', fields: ['dateType', 'endDate', 'repeatInterval', 'repeatCount'] },
-      { name: 'meta', label: 'Meta', fields: ['tags', 'published'] }
+      {
+        name: 'basic',
+        label: 'Basics',
+        fields: ['title', 'slug', 'startDate', 'allDay', 'startTime', 'endTime']
+      },
+      {
+        name: 'advanced',
+        label: 'Advanced',
+        fields: ['dateType', 'endDate', 'repeatInterval', 'repeatCount']
+      },
+      {
+        name: 'meta',
+        label: 'Meta',
+        fields: ['tags', 'published']
+      }
     ];
 
     options.addColumns = [
