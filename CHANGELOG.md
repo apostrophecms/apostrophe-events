@@ -1,3 +1,7 @@
+### 2.1.7 2020-06-17
+
+Improves help text and labeling on fields.
+
 ### 2.1.6 2020-03-31
 
 Updates the linter, removes an unused dependency, and sets up CircleCI.

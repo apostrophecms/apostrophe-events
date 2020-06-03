@@ -23,6 +23,7 @@ module.exports = {
       {
         name: 'startDate',
         label: 'Date',
+        help: 'The date, or starting date, of the event',
         type: 'date',
         required: true
       },
@@ -60,6 +61,7 @@ module.exports = {
       {
         name: 'dateType',
         label: 'What type of event is this?',
+        help: 'Select if the event is on a single day, consecutive days, or repeats.',
         type: 'select',
         choices: [
           {
@@ -86,22 +88,22 @@ module.exports = {
       },
       {
         name: 'repeatInterval',
-        label: 'Repeats every',
+        label: 'How often does the event repeat?',
         type: 'select',
         choices: [
           {
-            label: 'Week',
+            label: 'Every week',
             value: 'weeks'
           },
           {
-            label: 'Month',
+            label: 'Every month',
             value: 'months'
           }
         ]
       },
       {
         name: 'repeatCount',
-        label: 'Repeats how many times?',
+        label: 'How many times does it repeat?',
         type: 'integer',
         def: 1
       }
