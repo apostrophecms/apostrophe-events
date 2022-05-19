@@ -1,3 +1,7 @@
+### UNRELEASED
+
+Fixes an error that was occurring when trying to save a recurring event.
+
 ### 2.1.7 2020-06-17
 
 Improves help text and labeling on fields.

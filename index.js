@@ -230,6 +230,9 @@ module.exports = {
       return async.eachLimit(addDates, 5, function(date, callback) {
         var eventCopy = _.cloneDeep(piece);
         eventCopy._id = self.apos.utils.generateId();
+        if (piece.workflowGuid) {
+          eventCopy.workflowGuid = self.apos.utils.generateId();
+        }
         eventCopy.parentId = piece._id;
         eventCopy.isClone = true;
         eventCopy.startDate = date;
