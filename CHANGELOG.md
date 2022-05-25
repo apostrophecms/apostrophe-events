@@ -1,4 +1,4 @@
-### UNRELEASED
+### 2.1.8 2022-05-23
 
 Fixes an error that was occurring when trying to save a recurring event.
 
