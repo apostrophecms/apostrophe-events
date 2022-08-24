@@ -177,7 +177,7 @@ module.exports = {
       return callback(null);
     };
 
-    self.afterInsert = function(req, piece, options, callback) {
+    self.afterSave = function(req, piece, options, callback) {
       if (piece._workflowPropagating) {
         // Workflow is replicating this but also its existing
         // scheduled repetitions, don't re-replicate them and cause problems
@@ -185,9 +185,8 @@ module.exports = {
       }
       if (piece.dateType === 'repeat') {
         return self.repeatEvent(req, piece, callback);
-      } else {
-        return callback(null);
       }
+      return callback(null);
     };
 
     self.denormalizeDatesAndTimes = function(piece) {

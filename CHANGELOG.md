@@ -1,3 +1,7 @@
+### 2.2.0 UNRELEASED
+
+An event can now be repeated (selecting recurring type) after editing it, not only after saving it for the first time.
+
 ### 2.1.8 2022-05-23
 
 Fixes an error that was occurring when trying to save a recurring event.
