@@ -183,10 +183,20 @@ module.exports = {
         // scheduled repetitions, don't re-replicate them and cause problems
         return callback(null);
       }
-      if (piece.dateType === 'repeat') {
-        return self.repeatEvent(req, piece, callback);
+
+      if (piece.dateType !== 'repeat') {
+        return callback(null);
       }
-      return callback(null);
+
+      self
+        .find(req, { parentId: piece._id, trash: false }, { _id: 1 })
+        .toArray(function(err, docs) {
+          if (!docs.length) {
+            // Replicate event only if it has no replicated events already
+            return self.repeatEvent(req, piece, callback);
+          }
+          callback(null);
+        });
     };
 
     self.denormalizeDatesAndTimes = function(piece) {
