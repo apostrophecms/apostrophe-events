@@ -191,6 +191,9 @@ module.exports = {
       self
         .find(req, { parentId: piece._id, trash: false }, { _id: 1 })
         .toArray(function(err, docs) {
+          if (err) {
+            return callback(err);
+          }
           if (!docs.length) {
             // Replicate event only if it has no replicated events already
             return self.repeatEvent(req, piece, callback);
