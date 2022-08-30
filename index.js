@@ -177,17 +177,29 @@ module.exports = {
       return callback(null);
     };
 
-    self.afterInsert = function(req, piece, options, callback) {
+    self.afterSave = function(req, piece, options, callback) {
       if (piece._workflowPropagating) {
         // Workflow is replicating this but also its existing
         // scheduled repetitions, don't re-replicate them and cause problems
         return callback(null);
       }
-      if (piece.dateType === 'repeat') {
-        return self.repeatEvent(req, piece, callback);
-      } else {
+
+      if (piece.dateType !== 'repeat') {
         return callback(null);
       }
+
+      self
+        .find(req, { parentId: piece._id, trash: false }, { _id: 1 })
+        .toArray(function(err, docs) {
+          if (err) {
+            return callback(err);
+          }
+          if (!docs.length) {
+            // Replicate event only if it has no replicated events already
+            return self.repeatEvent(req, piece, callback);
+          }
+          callback(null);
+        });
     };
 
     self.denormalizeDatesAndTimes = function(piece) {
