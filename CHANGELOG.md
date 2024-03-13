@@ -1,6 +1,7 @@
 ### UNRELEASED
 
-When repeating an event, we were basing our knowledge of wether or not this event already had dupplicates on its parent's `id` but its id would change between versions, resulting in infinite dupplicates when updating an event with the `repeat` property. This has been to change the check on its parent's `workflowGuid` that does not change accross document versions.
+* When repeating an event, we were basing our knowledge of wether or not this event already had dupplicates on its parent's `id` but its id would change between versions, resulting in infinite dupplicates when updating an event with the `repeat` property. This has been to change the check on its parent's `workflowGuid` that does not change accross document versions.
+* Although it caused no apparent issue, the pieces that were dupplicated in a dupplicated event had its parents `hasClones` property set to true (since it was dupplicated and unchanged after that). To make more sense in the pieces, the dupplicates now have the `nowClones` property set to false upon cloning.
 
 ### 2.2.0 2022-08-31
 
