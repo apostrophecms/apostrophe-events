@@ -189,8 +189,10 @@ module.exports = {
       }
 
       self
-        .find(req, { parentId: piece._id, trash: false }, { _id: 1 })
+        .find(req, { parentId: piece.workflowGuid, trash: false }, { _id: 1 })
         .toArray(function(err, docs) {
+          console.log('err', err);
+          console.log('docs', docs);
           if (err) {
             return callback(err);
           }
@@ -245,8 +247,9 @@ module.exports = {
         if (piece.workflowGuid) {
           eventCopy.workflowGuid = self.apos.utils.generateId();
         }
-        eventCopy.parentId = piece._id;
+        eventCopy.parentId = piece.workflowGuid;
         eventCopy.isClone = true;
+        eventCopy.hasClones = false;
         eventCopy.startDate = date;
         eventCopy.endDate = date;
         eventCopy.slug = eventCopy.slug + '-' + date;
