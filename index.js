@@ -191,8 +191,6 @@ module.exports = {
       self
         .find(req, { parentId: piece.workflowGuid, trash: false }, { _id: 1 })
         .toArray(function(err, docs) {
-          console.log('err', err);
-          console.log('docs', docs);
           if (err) {
             return callback(err);
           }
