@@ -1,3 +1,13 @@
+## UNRELEASED
+
+⚠️ ☝️Due to breaking change, MAJOR version should be incremented to `3.0.0`. Please remove this warning when doing so during the release.
+
+* When repeating an event, we were basing our knowledge of whether or not this event already had duplicates, on its parent's `id` but its `id` would change between versions. This resulted in infinite duplicates when committing an event with the `repeat` property. This has been changed to check that its parent's `workflowGuid` does not change across document versions.
+
+**BREAKING CHANGE:** In projects, the way of retrieving parent and children (repeated) events should now be done with `workflowGuid` and `workflowLocale`, and not `_id` anymore.
+
+* Although it caused no apparent issue, the pieces that were duplicated from an event of type `repeat` had its parent's `hasClones` property set to true (since it was duplicated and unchanged after that). To make more sense in the pieces, the duplicates now have the `nowClones` property set to false upon cloning.
+
 ### 2.2.0 2022-08-31
 
 An event can now be repeated (selecting recurring type) after editing it, not only after saving it for the first time.
