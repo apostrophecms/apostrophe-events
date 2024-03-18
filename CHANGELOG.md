@@ -1,6 +1,6 @@
 ## UNRELEASED
 
-⚠️ ☝️Due to breking change, MAJOR version should be incremented to `3.0.0`. Please remove this warning when doing so during the release.
+⚠️ ☝️Due to breaking change, MAJOR version should be incremented to `3.0.0`. Please remove this warning when doing so during the release.
 
 * When repeating an event, we were basing our knowledge of whether or not this event already had duplicates, on its parent's `id` but its `id` would change between versions. This resulted in infinite duplicates when committing an event with the `repeat` property. This has been changed to check that its parent's `workflowGuid` does not change across document versions.
 
