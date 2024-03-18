@@ -165,6 +165,8 @@ module.exports = {
   },
 
   construct: function(self, options) {
+    // Run migrations:
+    require('./lib/migrations.js')(self, options);
 
     // limit the results of autocomplete for joins
     // so they only include upcoming events
