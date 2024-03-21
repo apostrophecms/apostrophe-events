@@ -61,7 +61,7 @@ module.exports = {
       {
         name: 'dateType',
         label: 'What type of event is this?',
-        help: 'Select if the event is on a single day, consecutive days, or repeats.',
+        help: 'Select if the event is on a single day, consecutive days, multi-day or repeats.',
         type: 'select',
         choices: [
           {
@@ -72,6 +72,11 @@ module.exports = {
             label: 'Consecutive Days',
             value: 'consecutive',
             showFields: ['endDate']
+          },
+          {
+            label: 'Mutliple Days',
+            value: 'multiday',
+            showFields: ['additionalDates']
           },
           {
             label: 'Recurring',
@@ -85,6 +90,19 @@ module.exports = {
         name: 'endDate',
         label: 'End Date',
         type: 'date'
+      },
+      {
+        name: 'additionalDates',
+        label: 'Additional Dates',
+        type: 'array',
+        labelField: 'Dates',
+        schema: [
+          {
+            name: 'date',
+            label: 'Date',
+            type: 'date'
+          }
+        ]
       },
       {
         name: 'repeatInterval',
@@ -118,7 +136,7 @@ module.exports = {
       {
         name: 'advanced',
         label: 'Advanced',
-        fields: ['dateType', 'endDate', 'repeatInterval', 'repeatCount']
+        fields: ['dateType', 'endDate', 'additionalDates', 'repeatInterval', 'repeatCount']
       },
       {
         name: 'meta',
